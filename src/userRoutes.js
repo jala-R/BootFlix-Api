@@ -8,7 +8,7 @@ const express=require("express"),
 
 
 app.get("/google-auth",(req,res)=>{
-    console.log(req.protocol)
+    console.log(req)
     let url=`https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${process.env.GOOGLECLIENTID}&scope=openid%20email%20profile&redirect_uri=${req.protocol}%3A//${req.headers.host}/oauth-google-callback&state=aroundTrip`
     res.send(url)
 })
