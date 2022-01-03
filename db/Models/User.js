@@ -16,11 +16,6 @@ const userSchema=new mongoose.Schema({
         type:Boolean,
         default:false
     },
-    plan:{
-        type:String,
-        enum:["Free","Standard","Preminum"],
-        default:"Free"
-    },
     tokens:{
         type:[String]
     },
@@ -30,17 +25,48 @@ const userSchema=new mongoose.Schema({
     fid:{
         type:String,
         sparse:true
+    },
+    timer:{
+        type:String
     }
+},{
+    timestamps:true
 })
 
 
 const User=mongoose.model("User",userSchema);
 
+User.prototype.upgradePlan=function(plan){
+    this.timer=jwt.sign({plan},process.env.JWTSECRET,{
+        expiresIn:60*60*24*30
+    })
+    this.plan=plan;
+}
+
+User.prototype.getPlan=function(){
+    try{
+        const {iat,exp,plan}=(jwt.verify(this.timer,process.env.JWTSECRET))
+        console.log("iat",new Date(iat*1000))
+        console.log("exp",new Date(exp*1000))
+        let diff=((new Date(exp*1000)-new Date()))/1000;
+        
+        let hours=diff%(60*60*24);
+        let days=(diff-hours)/(60*60*24);
+        hours/=(60*60)
+        hours=Math.floor(hours)
+        return {plan,days,hours}
+    }catch(err){
+        return {plan:"Free"}
+    }
+}
+
+
 
 User.prototype.createJWTToken=function(){
     let limit;
-    if(this.plan==="Free")limit=1;
-    else if(this.plan==="Standard")limit=2;
+    let {plan}=this.getPlan();
+    if(plan==="Free")limit=1;
+    else if(plan==="Standard")limit=2;
     else limit=4;
     if(this.tokens.length<limit){
         let token=jwt.sign({id:this.id},process.env.JWTSECRET,{
@@ -61,6 +87,20 @@ User.prototype.logout=function(token){
             return;
         }
     }
+}
+
+User.prototype.toJSON=function(){
+    let toSend=this.toObject();
+    delete toSend._id;
+    toSend.tokens=this.tokens.length;
+    delete toSend.gid;
+    delete toSend.isAdmin;
+    toSend.plan=this.getPlan();
+    delete toSend.__v;
+    delete toSend.timer;
+    return toSend;
+    
+
 }
 
 User.prototype.logoutAll=function(){
