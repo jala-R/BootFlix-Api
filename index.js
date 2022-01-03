@@ -14,6 +14,7 @@ const express=require("express"),
     adminRoutes=require("./src/adminRoutes");
 require("./db/connect");
 //Configs
+app.enable("trust proxy")
 app.use(express.json());
 app.use(cookieParser(process.env.COOKIESECRET))
 
