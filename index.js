@@ -3,7 +3,14 @@ const express=require("express"),
     userRoutes=require("./src/userRoutes"),
     cookieParser=require("cookie-parser"),
     {Storage}=require("@google-cloud/storage"),
-    storage = new Storage({keyFilename:"./envs/apikeys.json"}),
+    storage = new Storage({
+        projectId:process.env.project_id,
+        email:process.env.client_email,
+        credentials:{
+            client_email:process.env.client_email,
+            private_key:process.env.private_key
+        }
+    }),
     adminRoutes=require("./src/adminRoutes");
 require("./db/connect");
 //Configs
