@@ -150,7 +150,7 @@ app.get("/upgradePlan/:toPlan",async (req,res)=>{
                 "Authorization":"Basic "+Buffer.from(process.env.RAZORPAYID + ':' + process.env.RAZORPAYSECRET).toString('base64')
             }
         })
-        data.id=process.env.RAZORPAYID;
+        data.clientId=process.env.RAZORPAYID;
         res.send(data)
 
     }catch(err){
