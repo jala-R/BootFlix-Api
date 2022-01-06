@@ -51,7 +51,7 @@ app.get("/oauth-google-callback",async (req,res)=>{
             sameSite:"none",
             secure:true
         })
-        res.send();
+        res.send(user);
     }catch(err){
         res.status(400).send(err.message);
     }
@@ -176,8 +176,8 @@ app.post("/payment-succesfull",loginMiddleware,async (req,res)=>{
         })  
         // console.log(orderDetails)
         if(orderDetails.status!=="paid")throw new Error("not paid yet");
-        if(orderDetails.amount_paid==process.env.SATANDARDPRICE)req.user.upgradePlan("Standard");
-        else if(orderDetails.amount_paid==process.env.PREMIMUMPRICE)req.user.upgradePlan("Preminum");
+        if(orderDetails.amount_paid==process.env.SATANDARDPRICE){req.user.upgradePlan("Standard");req.body.toPlan="Standard"}
+        else if(orderDetails.amount_paid==process.env.PREMIMUMPRICE){req.user.upgradePlan("Preminum");req.body.toPlan="Preminum"}
 
         await req.user.createPayment(req.body);
 
@@ -192,9 +192,12 @@ app.post("/payment-succesfull",loginMiddleware,async (req,res)=>{
 
 
 app.get("/getPaymentList",loginMiddleware,async (req,res)=>{
-    console.log(req.user.payments);
-    await (req.user.populate("payments"));
-    console.log(req.user.payments);
+    // console.log(req.user.payments);
+    await (req.user.populate({
+        path:"payments",
+        select:"toPlan created_at"
+    }));
+    // console.log(req.user.payments);
     res.send(req.user.payments)
 })
 

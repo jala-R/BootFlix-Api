@@ -29,17 +29,17 @@ const userSchema=new mongoose.Schema({
     },
     timer:{
         type:String
-    },
-    payments:{
-        type:[{
-            type:mongoose.SchemaTypes.ObjectId,
-            ref:"Payment"
-        }]
     }
 },{
     timestamps:true
 })
 
+
+userSchema.virtual("payments",{
+    ref:"Payment",
+    localField:"_id",
+    foreignField:"userId"
+})
 
 const User=mongoose.model("User",userSchema);
 
@@ -114,12 +114,13 @@ User.prototype.createPayment=async function(paymentDetails){
     let payment=new Payment({
         orderId:paymentDetails.razorpay_order_id,
         paymentId:paymentDetails.razorpay_payment_id,
-        userId:this._id
+        userId:this._id,
+        toPlan:paymentDetails.toPlan
     })
     payment=await payment.save();
-    console.log(payment._id)
+    // console.log(payment._id)
     this.payments.push(payment._id);
-    console.log(this);
+    // console.log(this);
     // console.log(payment)
 
 }
