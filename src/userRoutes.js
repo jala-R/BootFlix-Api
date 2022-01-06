@@ -195,7 +195,7 @@ app.get("/getPaymentList",loginMiddleware,async (req,res)=>{
     // console.log(req.user.payments);
     await (req.user.populate({
         path:"payments",
-        select:"toPlan created_at"
+        select:"toPlan createdAt"
     }));
     // console.log(req.user.payments);
     res.send(req.user.payments)
