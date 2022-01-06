@@ -112,8 +112,8 @@ User.prototype.toJSON=function(){
 
 User.prototype.createPayment=async function(paymentDetails){
     let payment=new Payment({
-        orderId:razorpay_order_id,
-        paymentId:razorpay_payment_id,
+        orderId:paymentDetails.razorpay_order_id,
+        paymentId:paymentDetails.razorpay_payment_id,
         userId:this._id
     })
     payment=await payment.save();
