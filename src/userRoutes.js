@@ -197,7 +197,7 @@ app.get("/getPaymentList",loginMiddleware,(req,res)=>{
 })
 
 app.get("/me",loginMiddleware,(req,res)=>{
-    req.user.getPlan()
+    // req.user.getPlan()
     res.send(req.user)
 })
 
