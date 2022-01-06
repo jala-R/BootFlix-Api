@@ -65,7 +65,7 @@ app.get("/logout",loginMiddleware,async (req,res)=>{
         let token=req.cookies.sid;
         req.user.logout(token);
         await req.user.save();
-        res.clearCookie("sid",{path:"/"});
+        res.clearCookie("sid",{path:"/",sameSite:"none"});
         res.send("logout succesfully");
     }catch(err){
         console.log(err)
