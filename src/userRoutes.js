@@ -192,7 +192,9 @@ app.post("/payment-succesfull",loginMiddleware,async (req,res)=>{
 
 
 app.get("/getPaymentList",loginMiddleware,async (req,res)=>{
+    console.log(req.user.payments);
     await (req.user.populate("payments"));
+    console.log(req.user.payments);
     res.send(req.user.payments)
 })
 
