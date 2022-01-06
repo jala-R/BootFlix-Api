@@ -49,9 +49,10 @@ app.get("/oauth-google-callback",async (req,res)=>{
             httpOnly:true,
             maxAge:1000*60*60*24*365*2,
             sameSite:"none",
-            secure:true
+            secure:true,
+            path:"/"
         })
-        res.send(user);
+        res.redirect("https://bootflix.herokuapp.com");
     }catch(err){
         res.status(400).send(err.message);
     }
@@ -64,7 +65,7 @@ app.get("/logout",loginMiddleware,async (req,res)=>{
         let token=req.cookies.sid;
         req.user.logout(token);
         await req.user.save();
-        res.clearCookie("sid");
+        res.clearCookie("sid",{path:"/"});
         res.send("logout succesfully");
     }catch(err){
         console.log(err)
