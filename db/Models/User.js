@@ -119,6 +119,7 @@ User.prototype.createPayment=async function(paymentDetails){
     payment=await payment.save();
     console.log(payment._id)
     this.payments.push(payment._id);
+    console.log(this);
     // console.log(payment)
 
 }
