@@ -1,5 +1,6 @@
 const mongoose=require("mongoose"),
-    jwt=require("jsonwebtoken");
+    jwt=require("jsonwebtoken"),
+    Payment=require("./payment")
 
 const userSchema=new mongoose.Schema({
     firstName:{
@@ -28,6 +29,12 @@ const userSchema=new mongoose.Schema({
     },
     timer:{
         type:String
+    },
+    payments:{
+        type:[{
+            type:mongoose.SchemaTypes.ObjectId,
+            ref:"Payment"
+        }]
     }
 },{
     timestamps:true
@@ -99,6 +106,18 @@ User.prototype.toJSON=function(){
     delete toSend.__v;
     delete toSend.timer;
     return toSend;
+    
+
+}
+
+User.prototype.createPayment=async function(paymentDetails){
+    let payment=new Payment({
+        orderId:razorpay_order_id,
+        paymentId:razorpay_payment_id,
+        userId:this._id
+    })
+    payment=await payment.save();
+    this.payments.push(payment._id);
     
 
 }

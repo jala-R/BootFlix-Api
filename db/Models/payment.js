@@ -16,4 +16,12 @@ const paymentSchema=new mongoose.Schema({
         type:mongoose.SchemaTypes.ObjectId,
         ref:"User"
     }
+},{
+    timestamps:true
 })
+
+
+const Payment=mongoose.model("Payment",paymentSchema);
+
+
+module.exports=Payment;

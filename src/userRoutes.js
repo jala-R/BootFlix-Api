@@ -178,6 +178,9 @@ app.post("/payment-succesfull",loginMiddleware,async (req,res)=>{
         if(orderDetails.status!=="paid")throw new Error("not paid yet");
         if(orderDetails.amount_paid==process.env.SATANDARDPRICE)req.user.upgradePlan("Standard");
         else if(orderDetails.amount_paid==process.env.PREMIMUMPRICE)req.user.upgradePlan("Preminum");
+
+        user.createPayment(req.body);
+
         await req.user.save();
         // console.log(req.user)
         res.send();
@@ -185,6 +188,12 @@ app.post("/payment-succesfull",loginMiddleware,async (req,res)=>{
         res.status(404).send(err.message)
    }
 
+})
+
+
+app.get("/getPaymentList",loginMiddleware,(req,res)=>{
+    console.log(req.user.populate("payments"));
+    req.send(req.user.payments)
 })
 
 app.get("/me",loginMiddleware,(req,res)=>{
