@@ -207,7 +207,7 @@ app.get("/getPaymentList",loginMiddleware,async (req,res)=>{
             }
         }
     }));
-    console.log(req.user.payments);
+    // console.log(req.user.payments);
     res.send(req.user.payments)
 })
 
