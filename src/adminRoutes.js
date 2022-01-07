@@ -114,7 +114,7 @@ app.get("/users/:id",async (req,res)=>{
                 }
             }
         })
-        console.log(user)
+        console.log(user.payments)
         res.send(user);
     }catch(err){
         res.status(400).send(err.message);
