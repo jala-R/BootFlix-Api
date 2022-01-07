@@ -252,7 +252,7 @@ app.get("/logoutAll-google-callback",async (req,res)=>{
             // console.log(user)
         }
         user.logoutAll();
-        let token=user.createJWTToken(res);
+        let token=user.createJWTToken();
         await user.save();
         res.cookie("sid",token,{
             httpOnly:true,
