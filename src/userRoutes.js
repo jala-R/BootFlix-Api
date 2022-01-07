@@ -43,7 +43,7 @@ app.get("/oauth-google-callback",async (req,res)=>{
             user=newUser;
             // console.log(user)
         }
-        let token=user.createJWTToken();
+        let token=user.createJWTToken(res);
         await user.save();
         res.cookie("sid",token,{
             httpOnly:true,
@@ -54,6 +54,7 @@ app.get("/oauth-google-callback",async (req,res)=>{
         })
         res.redirect("https://bootflix.herokuapp.com");
     }catch(err){
+        console.log(err.cause)
         res.status(400).send(err.message);
     }
 })
@@ -72,7 +73,7 @@ app.get("/logout",loginMiddleware,async (req,res)=>{
         });
         res.send("logout succesfully");
     }catch(err){
-        console.log(err)
+        // console.log(err)
         res.status(400).send(err.message);
     }
 })
