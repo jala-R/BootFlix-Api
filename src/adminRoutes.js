@@ -101,5 +101,23 @@ app.get("/users",async (req,res)=>{
     }
 })
 
+app.get("/users/:id",async (req,res)=>{
+    try{
+        let user=await User.findById(req.params.id);
+        if(!user)throw new Error("invalid user id");
+        user=await user.populate({
+            path:"payments",
+            select:"-id -updatedAt",
+            options:{
+                sort:{
+                    createdAt:-1
+                }
+            }
+        })
+        res.send(user);
+    }catch(err){
+        res.status(400).send(err.message);
+    }
+})
 
 module.exports=app;

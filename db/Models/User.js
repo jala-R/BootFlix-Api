@@ -95,13 +95,14 @@ User.prototype.logout=function(token){
 
 User.prototype.toJSON=function(){
     let toSend=this.toObject();
-    delete toSend._id;
+    // delete toSend._id;
     toSend.tokens=this.tokens.length;
     delete toSend.gid;
     delete toSend.isAdmin;
     toSend.plan=this.getPlan();
     delete toSend.__v;
     delete toSend.timer;
+    delete toSend.updatedAt;
     return toSend;
     
 
