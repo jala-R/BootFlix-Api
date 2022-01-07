@@ -83,7 +83,7 @@ User.prototype.createJWTToken=function(){
         this.tokens.push(token);
         return token;
     }else{
-        throw new Error("screen limit reached",{cause:"SCLR"})
+        throw new Error("screen limit reached")
     }
 }
 

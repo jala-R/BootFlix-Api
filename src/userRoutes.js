@@ -54,7 +54,6 @@ app.get("/oauth-google-callback",async (req,res)=>{
         })
         res.redirect("https://bootflix.herokuapp.com");
     }catch(err){
-        console.log(Object.keys(err))
         res.status(400).send(err.message);
     }
 })
@@ -215,6 +214,57 @@ app.get("/getPaymentList",loginMiddleware,async (req,res)=>{
 app.get("/me",loginMiddleware,(req,res)=>{
     // req.user.getPlan()
     res.send(req.user)
+})
+
+
+app.get("/google-logoutAll",(req,res)=>{
+    let url=`https://accounts.google.com/o/oauth2/v2/auth?response_type=code&client_id=${process.env.GOOGLECLIENTID}&scope=openid%20email%20profile&redirect_uri=${req.protocol}%3A//${req.headers.host}/logoutAll-google-callback&state=aroundTrip`
+    res.send(url)
+})
+
+app.get("/logoutAll-google-callback",async (req,res)=>{
+    try{
+        let {data}=await axios({
+            url:"https://oauth2.googleapis.com/token",
+            method:"post",
+            headers:{
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            data:`code=${req.query.code}&client_id=${process.env.GOOGLECLIENTID}&client_secret=${process.env.GOOGLESECRET}&redirect_uri=${req.protocol}%3A//${req.headers.host}/oauth-google-callback&grant_type=authorization_code`
+        })
+        let {data:userInfo}=await axios({
+            url:"https://www.googleapis.com/oauth2/v2/userinfo",
+            method:"get",
+            headers:{
+                Authorization:`Bearer ${data.access_token}`
+            }
+        })
+        let gid=userInfo.id;
+        let user=await User.findOne({gid});
+        if(!user){
+            let newUser=new User({
+                firstName:userInfo.given_name,
+                lastName:userInfo.family_name,
+                profilePic:userInfo.picture,
+                gid
+            })
+            user=newUser;
+            // console.log(user)
+        }
+        user.logoutAll();
+        let token=user.createJWTToken(res);
+        await user.save();
+        res.cookie("sid",token,{
+            httpOnly:true,
+            maxAge:1000*60*60*24*365*2,
+            sameSite:"none",
+            secure:true,
+            path:"/"
+        })
+        res.redirect("https://bootflix.herokuapp.com");
+    }catch(err){
+        res.status(400).send(err.message);
+    }
 })
 
 module.exports=app;
