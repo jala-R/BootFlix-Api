@@ -54,7 +54,7 @@ app.get("/oauth-google-callback",async (req,res)=>{
         })
         res.redirect("https://bootflix.herokuapp.com");
     }catch(err){
-        console.log(err.cause)
+        console.log(Object.keys(err))
         res.status(400).send(err.message);
     }
 })
