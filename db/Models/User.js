@@ -53,10 +53,7 @@ User.prototype.upgradePlan=function(plan){
 User.prototype.getPlan=function(){
     try{
         const {iat,exp,plan}=(jwt.verify(this.timer,process.env.JWTSECRET))
-        // console.log("iat",new Date(iat*1000))
-        // console.log("exp",new Date(exp*1000))
         let diff=((new Date(exp*1000)-new Date()))/1000;
-        
         let hours=diff%(60*60*24);
         let days=(diff-hours)/(60*60*24);
         hours/=(60*60)

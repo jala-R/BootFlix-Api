@@ -3,7 +3,8 @@ const adminMiddleware = require("../helper/adminMiddleware"),
     express=require("express"),
     app=express.Router(),
     Movie=require("../db/Models/Movies"),
-    multer=require("multer");
+    multer=require("multer"),
+    User=require("../db/Models/User");
 
 
 class MovieCustomStorage {
@@ -87,7 +88,18 @@ app.post("/upload/trailer/:movieId",trailerParse.single("trailer"),(req,res)=>{
 })
 
 
-
+app.get("/users",async (req,res)=>{
+    try{
+        let users=await User.find({},null,{
+            sort:{
+                createdAt:-1
+            }
+        })
+        res.send(users);
+    }catch(err){
+        res.status(400).send(err.message)
+    }
+})
 
 
 module.exports=app;
