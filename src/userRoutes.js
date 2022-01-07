@@ -230,7 +230,7 @@ app.get("/logoutAll-google-callback",async (req,res)=>{
             headers:{
                 "Content-Type": "application/x-www-form-urlencoded"
             },
-            data:`code=${req.query.code}&client_id=${process.env.GOOGLECLIENTID}&client_secret=${process.env.GOOGLESECRET}&redirect_uri=${req.protocol}%3A//${req.headers.host}/oauth-google-callback&grant_type=authorization_code`
+            data:`code=${req.query.code}&client_id=${process.env.GOOGLECLIENTID}&client_secret=${process.env.GOOGLESECRET}&redirect_uri=${req.protocol}%3A//${req.headers.host}/logoutAll-google-callback&grant_type=authorization_code`
         })
         let {data:userInfo}=await axios({
             url:"https://www.googleapis.com/oauth2/v2/userinfo",
