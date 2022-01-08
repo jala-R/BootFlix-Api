@@ -13,7 +13,7 @@ let timerSchema=new mongoose.Schema({
     }
 })
 
-timerSchema.pre("delete",function(next){
+timerSchema.pre("remove",function(next){
     console.log("deletedddd ============");
     next();
 })
