@@ -13,6 +13,7 @@ const express=require("express"),
     }),
     adminRoutes=require("./src/adminRoutes");
 require("./db/connect");
+require("./db/Models/Timer")
 //Configs
 app.enable("trust proxy")
 app.use(express.json());
