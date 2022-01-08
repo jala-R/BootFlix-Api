@@ -107,7 +107,7 @@ User.prototype.toJSON=function(){
     delete toSend.updatedAt;
     delete toSend.id
     for(let i=0;i<this.payments.length;i++){
-        this.payments[i]=this.payments[i].toJSON();
+        toSend.payments[i]=this.payments[i].toJSON();
     }
     return toSend;
     
