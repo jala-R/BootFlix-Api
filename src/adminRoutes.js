@@ -138,6 +138,7 @@ app.get("/userDivisons",async (req,res)=>{
                 else -1;
             }
         })
+        console.log(preminum)
         standard.sort(function(user1,user2){
             if(user1.days>user2.days)return -1;
             else if(user1.days<user2.days)return 1;
