@@ -120,4 +120,48 @@ app.get("/users/:id",async (req,res)=>{
     }
 })
 
+app.get("/userDivisons",async (req,res)=>{
+    try{
+        let users=await User.find({});
+        let preminum=[],standard=[],free=[];
+        users.forEach((user)=>{
+            user.planDetails=user.getPlan();
+            if(user.planDetails.plan==="Standard")standard.push(user);
+            else if(user.planDetails.plan==="Preminum")preminum.push(user);
+            else free.push(user);
+        })
+        preminum.sort(function(user1,user2){
+            user1.planDetails.days=Number(user1.planDetails.days);
+            user2.planDetails.days=Number(user2.planDetails.days);
+            user1.planDetails.hours=Number(user1.planDetails.hours);
+            user2.planDetails.hours=Number(user2.planDetails.hours);
+            if(user1.days>user2.days)return -1;
+            else if(user1.days<user2.days)return 1;
+            else{
+                if(user1.hours>user2.hours)return -1;
+                else 1;
+            }
+        })
+        standard.sort(function(user1,user2){
+            user1.planDetails.days=Number(user1.planDetails.days);
+            user2.planDetails.days=Number(user2.planDetails.days);
+            user1.planDetails.hours=Number(user1.planDetails.hours);
+            user2.planDetails.hours=Number(user2.planDetails.hours);
+            if(user1.days>user2.days)return -1;
+            else if(user1.days<user2.days)return 1;
+            else{
+                if(user1.hours>user2.hours)return -1;
+                else 1;
+            }
+        })
+        res.send({
+            preminum,
+            standard,
+            free
+        })
+    }catch(err){
+        res.status(404).send(err.message);
+    }
+})
+
 module.exports=app;
