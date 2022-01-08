@@ -131,6 +131,8 @@ app.get("/userDivisons",async (req,res)=>{
             else free.push(user);
         })
         preminum.sort(function(user1,user2){
+            console.log(user1.planDetails)
+            console.log("=============")
             if(user1.planDetails.days>user2.planDetails.days)return 1;
             else if(user1.planDetails.days<user2.planDetails.days)return -1;
             else{
@@ -138,7 +140,7 @@ app.get("/userDivisons",async (req,res)=>{
                 else -1;
             }
         })
-        console.log(preminum)
+        // console.log(preminum)
         standard.sort(function(user1,user2){
             if(user1.planDetails.days>user2.planDetails.days)return 1;
             else if(user1.planDetails.days<user2.planDetails.days)return -1;
