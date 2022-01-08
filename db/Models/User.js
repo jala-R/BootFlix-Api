@@ -105,6 +105,7 @@ User.prototype.toJSON=function(){
     delete toSend.__v;
     delete toSend.timer;
     delete toSend.updatedAt;
+    delete toSend.id
     return toSend;
     
 
