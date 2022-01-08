@@ -135,11 +135,11 @@ app.get("/userDivisons",async (req,res)=>{
             user2.planDetails.days=Number(user2.planDetails.days);
             user1.planDetails.hours=Number(user1.planDetails.hours);
             user2.planDetails.hours=Number(user2.planDetails.hours);
-            if(user1.days>user2.days)return -1;
-            else if(user1.days<user2.days)return 1;
+            if(user1.days>user2.days)return 1;
+            else if(user1.days<user2.days)return -1;
             else{
-                if(user1.hours>user2.hours)return -1;
-                else 1;
+                if(user1.hours>user2.hours)return 1;
+                else -1;
             }
         })
         standard.sort(function(user1,user2){
@@ -147,11 +147,11 @@ app.get("/userDivisons",async (req,res)=>{
             user2.planDetails.days=Number(user2.planDetails.days);
             user1.planDetails.hours=Number(user1.planDetails.hours);
             user2.planDetails.hours=Number(user2.planDetails.hours);
-            if(user1.days>user2.days)return -1;
-            else if(user1.days<user2.days)return 1;
+            if(user1.days>user2.days)return 1;
+            else if(user1.days<user2.days)return -1;
             else{
-                if(user1.hours>user2.hours)return -1;
-                else 1;
+                if(user1.hours>user2.hours)return 1;
+                else -1;
             }
         })
         res.send({
