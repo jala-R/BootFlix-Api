@@ -30,4 +30,11 @@ const paymentSchema=new mongoose.Schema({
 const Payment=mongoose.model("Payment",paymentSchema);
 
 
+Payment.prototype.toJSON=function(){
+    let toSend=this.toObject;
+    delete toSend.id;
+    delete toSend.__v;
+    return toSend;
+}
+
 module.exports=Payment;
