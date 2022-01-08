@@ -31,7 +31,7 @@ const Payment=mongoose.model("Payment",paymentSchema);
 
 
 Payment.prototype.toJSON=function(){
-    let toSend=this.toObject;
+    let toSend=this.toObject();
     delete toSend.id;
     delete toSend.__v;
     return toSend;
