@@ -107,7 +107,7 @@ app.get("/users/:id",async (req,res)=>{
         if(!user)throw new Error("invalid user id");
         user=await user.populate({
             path:"payments",
-            select:"-updatedAt",
+            select:"-updatedAt -id -userId -__v",
             options:{
                 sort:{
                     createdAt:-1
