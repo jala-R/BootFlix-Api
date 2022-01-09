@@ -168,6 +168,9 @@ app.get("/getMonthlyData",async (req,res)=>{
                     },
                     year:{
                         $year:"$createdAt"
+                    },
+                    count:{
+                        $sum:1
                     }
                 }
             }
