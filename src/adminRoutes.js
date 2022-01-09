@@ -87,6 +87,19 @@ app.post("/upload/trailer/:movieId",trailerParse.single("trailer"),(req,res)=>{
     res.send();
 })
 
+app.put("/movies/:movieId",loginMiddleware,adminMiddleware,async (req,res)=>{
+    try{
+        let movie=await Movie.findById(req.params.movieId);
+        if(!movie)throw new Error("invalid id");
+        for(let i in Object.keys(req.body)){
+            movie.i=req.body.i;
+        }
+        movie=await movie.save();
+        res.send(movie)
+    }catch(err){
+        res.status(404).send(err.message);
+    }
+})
 
 app.get("/users",async (req,res)=>{
     try{
