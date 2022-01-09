@@ -187,7 +187,7 @@ app.get("/getMonthlyData",async (req,res)=>{
             },
             {
                 $group:{
-                    _id:"$_id",
+                    _id:null,
                     count:{
                         $sum:1
                     }
