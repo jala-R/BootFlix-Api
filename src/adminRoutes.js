@@ -131,22 +131,25 @@ app.get("/userDivisons",async (req,res)=>{
             else free.push(user);
         })
         preminum.sort(function(user1,user2){
-            console.log(user1.planDetails)
+            console.log(user1.planDetails.days,user2.planDetails.days);
+            console.log(user1.planDetails.days>user2.planDetails.days);
+            console.log(user1.planDetails.hours,user2.planDetails.hours);
+            console.log(user1.planDetails.hours>user2.planDetails.hours);
             console.log("=============")
-            if(user1.planDetails.days>user2.planDetails.days)return 1;
-            else if(user1.planDetails.days<user2.planDetails.days)return -1;
+            if(user1.planDetails.days>user2.planDetails.days)return -1;
+            else if(user1.planDetails.days<user2.planDetails.days)return 1;
             else{
-                if(user1.planDetails.hours>user2.planDetails.hours)return 1;
-                else -1;
+                if(user1.planDetails.hours>user2.planDetails.hours)return -1;
+                else 1;
             }
         })
         // console.log(preminum)
         standard.sort(function(user1,user2){
-            if(user1.planDetails.days>user2.planDetails.days)return 1;
-            else if(user1.planDetails.days<user2.planDetails.days)return -1;
+            if(user1.planDetails.days>user2.planDetails.days)return -1;
+            else if(user1.planDetails.days<user2.planDetails.days)return 1;
             else{
-                if(user1.planDetails.hours>user2.planDetails.hours)return 1;
-                else -1;
+                if(user1.planDetails.hours>user2.planDetails.hours)return -1;
+                else 1;
             }
         })
         res.send({
