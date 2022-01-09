@@ -186,9 +186,10 @@ app.get("/getMonthlyData",async (req,res)=>{
                 }
             },
             {
-                $project:{
+                $group:{
+                    _id:"$_id",
                     count:{
-                        $count:{}
+                        $sum:1
                     }
                 }
             }
