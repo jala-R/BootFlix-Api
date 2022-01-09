@@ -131,11 +131,6 @@ app.get("/userDivisons",async (req,res)=>{
             else free.push(user);
         })
         preminum.sort(function(user1,user2){
-            console.log(user1.planDetails.days,user2.planDetails.days);
-            console.log(user1.planDetails.days>user2.planDetails.days);
-            console.log(user1.planDetails.hours,user2.planDetails.hours);
-            console.log(user1.planDetails.hours>user2.planDetails.hours);
-            console.log("=============")
             if(user1.planDetails.days>user2.planDetails.days)return -1;
             else if(user1.planDetails.days<user2.planDetails.days)return 1;
             else{
@@ -157,6 +152,44 @@ app.get("/userDivisons",async (req,res)=>{
             standard,
             free
         })
+    }catch(err){
+        res.status(404).send(err.message);
+    }
+})
+
+
+app.get("/getMonthlyData",async (req,res)=>{
+    try{    
+        let count=await User.aggregate([
+            {
+                $match:{
+                    $expr:{
+                        $and:[
+                            {
+                                $eq:[
+                                    {
+                                        $month:"$createdAt"
+                                    },
+                                    req.query.month
+                                ]
+                            },
+                            {
+                                $eq:[
+                                    {
+                                        $year:"$createdAt"
+                                    },
+                                    req.query.year
+                                ]
+                            }
+                        ]
+                    }
+                }
+            },
+            {
+                $count:{}
+            }
+        ])
+        res.send(count)
     }catch(err){
         res.status(404).send(err.message);
     }
