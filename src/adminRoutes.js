@@ -186,7 +186,11 @@ app.get("/getMonthlyData",async (req,res)=>{
                 }
             },
             {
-                $count:{}
+                $project:{
+                    count:{
+                        $count:{}
+                    }
+                }
             }
         ])
         res.send(count)
