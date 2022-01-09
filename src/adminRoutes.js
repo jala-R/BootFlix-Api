@@ -173,6 +173,12 @@ app.get("/getMonthlyData",async (req,res)=>{
                         $sum:1
                     }
                 }
+            },
+            {
+                $group:{
+                    _id:null,
+                    count:{$sum:1}
+                }
             }
           ])
         res.send(count)
