@@ -161,31 +161,8 @@ app.get("/userDivisons",async (req,res)=>{
 app.get("/getMonthlyData",async (req,res)=>{
     try{    
         let count=await User.aggregate([
-            {
-                $match:{
-                    $expr:{
-                        $and:[
-                            {
-                                $eq:[
-                                    {
-                                        $month:"$createdAt"
-                                    },
-                                    req.query.month
-                                ]
-                            },
-                            {
-                                $eq:[
-                                    {
-                                        $year:"$createdAt"
-                                    },
-                                    req.query.year
-                                ]
-                            }
-                        ]
-                    }
-                }
-            }
-        ])
+            {$project: {month: {$month: '$createdAt',year:{$year:"$createdAt"}}}}
+          ])
         res.send(count)
     }catch(err){
         res.status(404).send(err.message);
