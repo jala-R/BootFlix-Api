@@ -37,7 +37,19 @@ const userSchema=new mongoose.Schema({
             ref:"User"
         },
         default:{}
-    }
+    },
+    history:{
+        type:[{
+            movieId:{
+                type:mongoose.SchemaTypes.ObjectId,
+                ref:"movie"
+            },
+            hour:{type:Number,default:0},
+            min:{type:Number,default:0},
+            sec:{type:Number,default:0}
+        }],
+        default:[]
+    },
 },{
     timestamps:true,
     toJSON:{virtuals:true},
@@ -52,6 +64,37 @@ userSchema.virtual("payments",{
 })
 
 const User=mongoose.model("User",userSchema);
+
+
+User.prototype.getMovieFromHistory=async function(movieId){
+    this.history.forEach((movie,i)=>{
+        if(movie.movieId==movieId){
+            this.history.splice(i,1);
+            this.history.unshift(movie);
+            await this.save();
+            return movie;
+        }
+    })
+    this.history.unshift({
+        movieId
+    })
+    await this.save();
+    return this.history[0];
+    
+}
+
+User.prototype.setMovieContinueTime=async function({movieId,hour,min,sec}){
+    this.history.forEach((movie,i)=>{
+        if(movie.movieId==movieId){
+            this.history.splice(i,1);
+            movie.hour=hour;
+            movie.min=min;
+            movie.sec=sec;
+            this.history.unshift(movie);
+            await this.save();
+        }
+    })
+}
 
 User.prototype.upgradePlan=function(plan){
     this.timer=jwt.sign({plan},process.env.JWTSECRET,{
