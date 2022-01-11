@@ -66,24 +66,38 @@ userSchema.virtual("payments",{
 const User=mongoose.model("User",userSchema);
 
 
-User.prototype.getMovieFromHistory=async function(movieId){
+User.prototype.getMovieFromHistory=(function(movieId){
     this.history.forEach((movie,i)=>{
         if(movie.movieId==movieId){
             this.history.splice(i,1);
             this.history.unshift(movie);
-            await this.save();
-            return movie;
+            return new Promise((res,rej)=>{
+                this.save()
+                .then(()=>{
+                    res(movie);
+                })
+                .catch((err)=>{
+                    rej(err);
+                })
+            })
         }
     })
     this.history.unshift({
         movieId
     })
-    await this.save();
-    return this.history[0];
+    return new Promise((res,rej)=>{
+        this.save()
+        .then(()=>{
+            res(this.history[0]);
+        })
+        .catch((err)=>{
+            rej(err);
+        })
+    })
     
-}
+})
 
-User.prototype.setMovieContinueTime=async function({movieId,hour,min,sec}){
+User.prototype.setMovieContinueTime=(function({movieId,hour,min,sec}){
     this.history.forEach((movie,i)=>{
         if(movie.movieId==movieId){
             this.history.splice(i,1);
@@ -91,10 +105,18 @@ User.prototype.setMovieContinueTime=async function({movieId,hour,min,sec}){
             movie.min=min;
             movie.sec=sec;
             this.history.unshift(movie);
-            await this.save();
+            return new Promise((res,rej)=>{
+                this.save()
+                .then(()=>{
+                    res();
+                })
+                .catch((err)=>{
+                    rej(err);
+                })
+            })
         }
     })
-}
+})
 
 User.prototype.upgradePlan=function(plan){
     this.timer=jwt.sign({plan},process.env.JWTSECRET,{
