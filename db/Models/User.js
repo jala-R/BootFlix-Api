@@ -34,7 +34,7 @@ const userSchema=new mongoose.Schema({
         type:Map,
         of:{
             type:mongoose.SchemaTypes.ObjectId,
-            ref:"user"
+            ref:"User"
         },
         default:{}
     }
