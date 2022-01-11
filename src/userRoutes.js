@@ -4,7 +4,8 @@ const express=require("express"),
     axios=require("axios"),
     loginMiddleware=require("../helper/loginMiddleWare"),
     isEligible=require("../helper/isEligible"),
-    crypto=require("crypto");
+    crypto=require("crypto"),
+    Movie=require("../db/Models/Movies");
 
 
 app.get("/google-auth",(req,res)=>{
@@ -264,6 +265,49 @@ app.get("/logoutAll-google-callback",async (req,res)=>{
         res.redirect("https://bootflix.herokuapp.com");
     }catch(err){
         res.status(400).send(err.message);
+    }
+})
+
+app.get("/movie/:id",async (req,res)=>{
+    try{
+        let movie=await Movie.findById(req.params.id);
+        if(!movie)throw new Error("invalid id");
+        res.send(movie)
+    }catch(err){
+        res.status(404).send(err.message);
+    }
+})
+
+app.get("/addMovieToWhislist/:movieId",loginMiddleware,async (req,res)=>{
+    try{
+        let movie=await User.findById(req.params.movieId);
+        if(!movie)throw new Error("invalid movie id");
+        req.user.addMovieToWhislist(req.params.movieId);
+        await req.user.save();
+        res.send();
+    }catch(err){
+        res.status(404).send(err.message);
+    }
+})
+
+app.get("/addMovieFromWhislist/:movieId",loginMiddleware,async (req,res)=>{
+    try{
+        let movie=await User.findById(req.params.movieId);
+        if(!movie)throw new Error("invalid movie id");
+        req.user.removeMovieFromWhislist(req.params.movieId);
+        await req.user.save();
+        res.send();
+    }catch(err){
+        res.status(404).send(err.message);
+    }
+})
+
+app.get("/getWhishList",loginMiddleware,async (req,res)=>{
+    try{
+        await req.user.populate("whislist.$*");
+        res.send(req.user.whislist);
+    }catch(err){
+        res.status(404).send(err.message);
     }
 })
 

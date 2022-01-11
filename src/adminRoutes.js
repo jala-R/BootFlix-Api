@@ -1,3 +1,21 @@
+//TODO
+//get monthly new users(done)
+//get plan user countin order(done)
+//get all users(done)
+//get payments of user(done)
+
+
+//create movie details(done)
+//upload movie(done)
+//edit movies details(done)
+//upload movie trailer(done)
+//delelte movie(done)
+//delete trailer(done)
+
+
+
+
+
 const adminMiddleware = require("../helper/adminMiddleware"),
     loginMiddleware = require("../helper/loginMiddleWare"),
     express=require("express"),
@@ -5,6 +23,7 @@ const adminMiddleware = require("../helper/adminMiddleware"),
     Movie=require("../db/Models/Movies"),
     multer=require("multer"),
     User=require("../db/Models/User");
+
 
 
 class MovieCustomStorage {
@@ -76,8 +95,6 @@ app.post("/upload/movie/:movieId",loginMiddleware,adminMiddleware,movieParse.sin
     console.log(req.file);
     console.log("movie uploaded")
     res.send();
-},()=>{
-    console.log("movie upload error")
 })
 
 
@@ -171,7 +188,7 @@ app.get("/userDivisons",async (req,res)=>{
 })
 
 
-app.get("/getMonthlyData",async (req,res)=>{
+app.get("/getMonthlyNewUser",async (req,res)=>{
     try{    
         let count=await User.aggregate([
             {$project:
@@ -199,5 +216,41 @@ app.get("/getMonthlyData",async (req,res)=>{
         res.status(404).send(err.message);
     }
 })
+
+app.delete("/movie/:movieId",loginMiddleware,adminMiddleware,async (req,res)=>{
+    try{
+        let movie=await Movie.findById(req.params.movieId);
+        if(!movie)throw new Error("invalid movieid");
+        await movie.removeMovie(req.googleClient);
+        await movie.removeTrailer(req.googleClient);
+        await movie.remove();
+        res.send();
+    }catch(err){
+        res,status(400).send(err.message)
+    }
+})
+
+app.delete("/movieVideo/:movieId",loginMiddleware,adminMiddleware,async (req,res)=>{
+    try{
+        let movie=await Movie.findById(req.params.movieId);
+        if(!movie)throw new Error("invalid movieid");
+        await movie.removeMovie(req.googleClient);
+        res.send();
+    }catch(err){
+        res,status(400).send(err.message)
+    }
+})
+
+app.delete("/movieTrailer/:movieId",loginMiddleware,adminMiddleware,async (req,res)=>{
+    try{
+        let movie=await Movie.findById(req.params.movieId);
+        if(!movie)throw new Error("invalid movieid");
+        await movie.removeTrailer(req.googleClient);
+        res.send();
+    }catch(err){
+        res,status(400).send(err.message)
+    }
+})
+
 
 module.exports=app;

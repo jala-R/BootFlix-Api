@@ -65,4 +65,12 @@ const movieSchema=new mongoose.Schema({
 
 const Movie=mongoose.model("movie",movieSchema);
 
+Movie.prototype.removeMovie=async function(googleClient){
+    await googleClient.bucket("movie-videos").file(this._id+".mp4").delete();
+}
+
+Movie.prototype.removeTrailer=async function(googleClient){
+    await googleClient.bucket("trailer-videos").file(this._id+".mp4").delete();
+}
+
 module.exports=Movie;

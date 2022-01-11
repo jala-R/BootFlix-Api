@@ -29,6 +29,13 @@ const userSchema=new mongoose.Schema({
     },
     timer:{
         type:String
+    },
+    whislist:{
+        type:Map,
+        of:{
+            type:mongoose.SchemaTypes.ObjectId,
+            ref:"user"
+        }
     }
 },{
     timestamps:true,
@@ -128,6 +135,14 @@ User.prototype.createPayment=async function(paymentDetails){
 
 User.prototype.logoutAll=function(){
     this.tokens=[];
+}
+
+User.prototype.addMovieToWhislist=function(movieId){
+    this.whislist.set(movieId,movieId);
+}
+
+User.prototype.removeMovieFromWhislist=function(movieId){
+    this.whislist.set(movieId,undefined);
 }
 
 module.exports=User
