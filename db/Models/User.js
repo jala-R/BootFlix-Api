@@ -35,7 +35,8 @@ const userSchema=new mongoose.Schema({
         of:{
             type:mongoose.SchemaTypes.ObjectId,
             ref:"user"
-        }
+        },
+        default:{}
     }
 },{
     timestamps:true,
