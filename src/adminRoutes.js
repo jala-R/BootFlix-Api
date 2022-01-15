@@ -156,13 +156,17 @@ app.get("/userDivisons",async (req,res)=>{
         let users=await User.find({});
         let preminum=0,standard=0,free=0;
         let userCountsMonthly=[];
-        for(let i=0;i<12;i++)userCountsMonthly[i]=0;
         let today=new Date();
         let curMonth=today.getMonth();
         let curYear=today.getFullYear();
+        for(let i=0;i<12;i++)userCountsMonthly[i]={
+            count:0,
+            month:curMonth+1
+        };
+        
         users.forEach((user)=>{
             let diff=getAccountAge(curMonth,curYear,user.createdAt);
-            if(diff<12)userCountsMonthly[diff]++;
+            if(diff<12)userCountsMonthly[diff].count++;
             user.planDetails=user.getPlan();
             if(user.planDetails.plan==="Standard")standard++;
             else if(user.planDetails.plan==="Preminum")preminum++;
