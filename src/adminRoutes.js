@@ -155,26 +155,27 @@ app.get("/paymentssTop5",async (req,res)=>{
             },
             limit:5
         })
-        // console.log(payments)
         payments.forEach(async (payment,i)=>{
-            console.log(await payment.populate({
+            payments[i]=(await payment.populate({
                 path:"userId",
                 select:"firstName lastName"
             }));
-            // console.log(payments[i].userId)
+            console.log(payments[i])
         })
-        // console.log(payments)
         res.send(payments);
     }catch(err){
         res.status(400).send(err.message)
     }
 })
 
-// app.get("/getMonthlyUsers",async (req,res)=>{
-//     try{
-
-//     }
-// })
+app.get("/getMonthlyUsers",async (req,res)=>{
+    try{
+        let today=new Date();
+        let curMonth=today.getMonth();
+    }catch(err){
+        res.status(404).send(err.message);
+    }
+})
 
 app.get("/users/:id",async (req,res)=>{
     try{
