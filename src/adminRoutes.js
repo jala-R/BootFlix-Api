@@ -155,6 +155,9 @@ app.get("/paymentssTop5",async (req,res)=>{
             },
             limit:5
         })
+        users.forEach(async (user)=>{
+            await user.populate("userId")
+        })
         res.send(users);
     }catch(err){
         res.status(400).send(err.message)
