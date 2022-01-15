@@ -320,7 +320,7 @@ app.delete("/user/:id",async (req,res)=>{
 
 app.get("/getAllPayments",async (req,res)=>{
     try{
-        let payments=Payment.find({},null,{
+        let payments=await Payment.find({},null,{
             sort:{
                 createdAt:-1
             }
