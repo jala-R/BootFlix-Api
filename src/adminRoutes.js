@@ -184,7 +184,7 @@ app.get("/getMonthlyUsers",async (req,res)=>{
         }
         users.forEach((user)=>{
             let diff=getAccountAge(curMonth,curYear,user.createdAt);
-            user[diff].count++;
+            monthsRec[diff].count++;
         })
         res.send(monthsRec)
 
