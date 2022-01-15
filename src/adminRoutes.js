@@ -161,7 +161,7 @@ app.get("/userDivisons",async (req,res)=>{
         let curYear=today.getFullYear();
         for(let i=0;i<12;i++)userCountsMonthly[i]={
             count:0,
-            month:1+(curMonth-i+11)%11
+            month:1+((curMonth-i+12)%12)
         };
         
         users.forEach((user)=>{
