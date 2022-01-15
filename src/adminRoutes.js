@@ -23,7 +23,8 @@ const adminMiddleware = require("../helper/adminMiddleware"),
     Movie=require("../db/Models/Movies"),
     multer=require("multer"),
     User=require("../db/Models/User"),
-    getAccountAge=require("../helper/getAccountAge");
+    getAccountAge=require("../helper/getAccountAge"),
+    Payment=require("../db/Models/payment");
 
 
 
@@ -163,10 +164,11 @@ app.get("/userDivisons",async (req,res)=>{
             count:0,
             month:1+((curMonth-i+12)%12)
         };
-        
+        let prevMonthUsers=0,curMonthUsers=0
         users.forEach((user)=>{
             let diff=getAccountAge(curMonth,curYear,user.createdAt);
-            if(diff<12)userCountsMonthly[diff].count++;
+            if(diff==0)curMonthUsers++;
+            else if(diff==1)prevMonthUsers++;
             user.planDetails=user.getPlan();
             if(user.planDetails.plan==="Standard")standard++;
             else if(user.planDetails.plan==="Preminum")preminum++;
@@ -174,17 +176,27 @@ app.get("/userDivisons",async (req,res)=>{
         })
 
 
+        let payments=await Payment.find({});
 
+        let totalRevenue=0,prevMonthRevenue=0,curMonthRevenue=0;
+        payments.forEach((payment)=>{
+            let diff=getAccountAge(curMonth,curYear,payment.createdAt);
+            if(diff===0){
+                curMonthRevenue+=(payment.toPlan==="Standard")?Number(process.env.SATANDARDPRICE)/100:((payment.toPlan==="Preminum")?Number(process.env.PREMIMUMPRICE)/100:0);
+            }else if(diff===1){
+                prevMonthRevenue+=(payment.toPlan==="Standard")?Number(process.env.SATANDARDPRICE)/100:((payment.toPlan==="Preminum")?Number(process.env.PREMIMUMPRICE)/100:0);
+            }
+            totalRevenue+=(payment.toPlan==="Standard")?Number(process.env.SATANDARDPRICE)/100:((payment.toPlan==="Preminum")?Number(process.env.PREMIMUMPRICE)/100:0);
+            
+        })
 
         res.send({
             totalUsers:preminum+standard+free,
-            currentPlanPopulation:{
-                preminum,
-                standard,
-                free,
-                
-            },
-            userCountsMonthly
+            totalSubcribers:preminum+standard,
+            totalRevenue,
+            userComparision:prevMonthUsers==0?curMonthUsers*100:100*(curMonthUsers-prevMonthUsers)/prevMonthUsers,
+            revenueComparision:prevMonthRevenue==0?curMonthRevenue*100:100*(curMonthRevenue-prevMonthRevenue)/prevMonthRevenue,
+            
         })
         
     }catch(err){
@@ -195,38 +207,7 @@ app.get("/userDivisons",async (req,res)=>{
 
 
 
-app.get("/getMonthlyNewUser",async (req,res)=>{
-    try{
-        let users=await User.find({});
-        let userCountsMonthly=[];
-        let today=new Date();
-        let curMonth=today.getMonth();
-        let curYear=today.getFullYear();
-        for(let i=0;i<12;i++)userCountsMonthly[i]={
-            count:0,
-            month:1+((curMonth-i+12)%12)
-        };
-        
-        users.forEach((user)=>{
-            let diff=getAccountAge(curMonth,curYear,user.createdAt);
-            if(diff<12)userCountsMonthly[diff].count++;
-        })
-        userCountsMonthly[11].precent=0;
-        for(let i=10;i>=0;i--){
-            userCountsMonthly[i].precent=100*(userCountsMonthly[i].count-userCountsMonthly[i+1].count)/userCountsMonthly[i+1].count
-        }
 
-
-
-
-        res.send({
-            userCountsMonthly
-        })
-        
-    }catch(err){
-        res.status(404).send(err.message);
-    }
-})
 
 app.delete("/movie/:movieId",loginMiddleware,adminMiddleware,async (req,res)=>{
     try{
