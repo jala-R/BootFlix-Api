@@ -162,7 +162,7 @@ app.get("/paymentssTop5",async (req,res)=>{
             }));
             // console.log(payments[i])
         })
-        console.log(payments.userId)
+        console.log(payments)
         res.send(payments);
     }catch(err){
         res.status(400).send(err.message)
@@ -177,7 +177,7 @@ app.get("/getMonthlyUsers",async (req,res)=>{
         let users=await User.find({});
         let monthsRec=[];
         for(let i=0;i<12;i++){
-            monthRec[i]={
+            monthsRec[i]={
                 count:0,
                 month:1+(curMonth-i+12)%12
             }
