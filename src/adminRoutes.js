@@ -189,13 +189,15 @@ app.get("/userDivisons",async (req,res)=>{
             totalRevenue+=(payment.toPlan==="Standard")?Number(process.env.SATANDARDPRICE)/100:((payment.toPlan==="Preminum")?Number(process.env.PREMIMUMPRICE)/100:0);
             
         })
+        let userComparision=prevMonthUsers==0?curMonthUsers*100:100*(curMonthUsers-prevMonthUsers)/prevMonthUsers;
+        let revenueComparision=prevMonthRevenue==0?curMonthRevenue*100:100*(curMonthRevenue-prevMonthRevenue)/prevMonthRevenue
 
         res.send({
             totalUsers:preminum+standard+free,
             totalSubcribers:preminum+standard,
             totalRevenue,
-            userComparision:prevMonthUsers==0?curMonthUsers*100:100*(curMonthUsers-prevMonthUsers)/prevMonthUsers,
-            revenueComparision:prevMonthRevenue==0?curMonthRevenue*100:100*(curMonthRevenue-prevMonthRevenue)/prevMonthRevenue,
+            userComparision:userComparision.toFixed(2),
+            revenueComparision:revenueComparision.toFixed(2)
             
         })
         
