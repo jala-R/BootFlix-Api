@@ -22,7 +22,8 @@ const adminMiddleware = require("../helper/adminMiddleware"),
     app=express.Router(),
     Movie=require("../db/Models/Movies"),
     multer=require("multer"),
-    User=require("../db/Models/User");
+    User=require("../db/Models/User"),
+    getAccountAge=require("../helper/getAccountAge");
 
 
 
@@ -154,8 +155,14 @@ app.get("/userDivisons",async (req,res)=>{
     try{
         let users=await User.find({});
         let preminum=0,standard=0,free=0;
+        let userCountsMonthly=[];
+        for(let i=0;i<12;i++)userCountsMonthly[i]=0;
+        let today=new Date();
+        let curMonth=today.getMonth();
+        let curYear=today.getFullYear();
         users.forEach((user)=>{
-            console.log(user.createdAt.getFullYear());
+            let diff=getAccountAge(curMonth,curYear,user.createdAt);
+            if(diff<12)userCountsMonthly[diff]++;
             user.planDetails=user.getPlan();
             if(user.planDetails.plan==="Standard")standard++;
             else if(user.planDetails.plan==="Preminum")preminum++;
@@ -171,6 +178,7 @@ app.get("/userDivisons",async (req,res)=>{
                 standard,
                 free
             },
+            userCountsMonthly
         })
         
     }catch(err){
