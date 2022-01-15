@@ -307,8 +307,28 @@ app.delete("/movieTrailer/:movieId",loginMiddleware,adminMiddleware,async (req,r
     }
 })
 
+app.delete("/user/:id",async (req,res)=>{
+    try{
+        let user=await User.findById(req.params.id);
+        if(!user)throw new Error("invalid id");
+        await user.remove();
+        res.send();
+    }catch(err){
+        res.status(404).send(err.message);
+    }
+})
 
-
-
+app.get("/getAllPayments",async (req,res)=>{
+    try{
+        let payments=Payment.find({},null,{
+            sort:{
+                createdAt:-1
+            }
+        })
+        res.send(payments)
+    }catch(err){
+        res.status(404).send(err.message);
+    }
+})
 
 module.exports=app;

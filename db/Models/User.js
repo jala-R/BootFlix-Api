@@ -68,6 +68,8 @@ userSchema.virtual("payments",{
     foreignField:"userId"
 })
 
+
+
 const User=mongoose.model("User",userSchema);
 
 
