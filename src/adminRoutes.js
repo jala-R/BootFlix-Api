@@ -133,6 +133,20 @@ app.get("/users",async (req,res)=>{
     }
 })
 
+app.get("/usersTop5",async (req,res)=>{
+    try{
+        let users=await User.find({},null,{
+            sort:{
+                createdAt:-1
+            },
+            limit:5
+        })
+        res.send(users);
+    }catch(err){
+        res.status(400).send(err.message)
+    }
+})
+
 app.get("/users/:id",async (req,res)=>{
     try{
         let user=await User.findById(req.params.id);
