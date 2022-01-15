@@ -12,3 +12,5 @@ function getAccountAge(curMonth,curYear,dateOfCreation){
     }
     return diff;
 }
+
+module.exports=getAccountAge
