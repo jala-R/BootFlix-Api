@@ -193,6 +193,7 @@ app.get("/userDivisons",async (req,res)=>{
         let revenueComparision=prevMonthRevenue==0?curMonthRevenue*100:100*(curMonthRevenue-prevMonthRevenue)/prevMonthRevenue
 
         res.send({
+            curMonthRevenue,
             curMonthUsers,
             totalUsers:preminum+standard+free,
             totalSubcribers:preminum+standard,
