@@ -157,10 +157,10 @@ app.get("/paymentssTop5",async (req,res)=>{
         })
         // console.log(payments)
         payments.forEach(async (payment,i)=>{
-            payments[i]=await payment.populate({
+            console.log(await payment.populate({
                 path:"userId",
                 select:"firstName lastName"
-            });
+            }));
             // console.log(payments[i].userId)
         })
         // console.log(payments)
@@ -170,7 +170,11 @@ app.get("/paymentssTop5",async (req,res)=>{
     }
 })
 
+// app.get("/getMonthlyUsers",async (req,res)=>{
+//     try{
 
+//     }
+// })
 
 app.get("/users/:id",async (req,res)=>{
     try{
