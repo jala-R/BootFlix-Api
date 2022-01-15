@@ -193,30 +193,36 @@ app.get("/userDivisons",async (req,res)=>{
 })
 
 
+
+
 app.get("/getMonthlyNewUser",async (req,res)=>{
-    try{    
-        let {count}=await User.aggregate([
-            {$project:
-                {
-                    month: {
-                        $month: '$createdAt'
-                    },
-                    year:{
-                        $year:"$createdAt"
-                    },
-                    count:{
-                        $sum:1
-                    }
-                }
-            },
-            {
-                $group:{
-                    _id:null,
-                    count:{$sum:1}
-                }
-            }
-          ])
-        res.send(count)
+    try{
+        let users=await User.find({});
+        let userCountsMonthly=[];
+        let today=new Date();
+        let curMonth=today.getMonth();
+        let curYear=today.getFullYear();
+        for(let i=0;i<12;i++)userCountsMonthly[i]={
+            count:0,
+            month:1+((curMonth-i+12)%12)
+        };
+        
+        users.forEach((user)=>{
+            let diff=getAccountAge(curMonth,curYear,user.createdAt);
+            if(diff<12)userCountsMonthly[diff].count++;
+        })
+        userCountsMonthly[11].precent=0;
+        for(let i=10;i>=0;i--){
+            userCountsMonthly[i].precent=100*(userCountsMonthly[i+1].count-userCountsMonthly[i].count)/userCountsMonthly[i+1].count
+        }
+
+
+
+
+        res.send({
+            userCountsMonthly
+        })
+        
     }catch(err){
         res.status(404).send(err.message);
     }
