@@ -213,7 +213,7 @@ app.get("/getMonthlyNewUser",async (req,res)=>{
         })
         userCountsMonthly[11].precent=0;
         for(let i=10;i>=0;i--){
-            userCountsMonthly[i].precent=100*(userCountsMonthly[i+1].count-userCountsMonthly[i].count)/userCountsMonthly[i+1].count
+            userCountsMonthly[i].precent=100*(userCountsMonthly[i].count-userCountsMonthly[i+1].count)/userCountsMonthly[i+1].count
         }
 
 
