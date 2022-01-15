@@ -38,7 +38,7 @@ Payment.prototype.toJSON=function(){
     let toSend=this.toObject();
     delete toSend.id;
     delete toSend.__v;
-    toSend.date=`${this.createdAt.getDate()}  ${monthNames[this.createdAt.getMonth()]}  ${this.createdAt.getFullYear}`;
+    toSend.date=`${this.createdAt.getDate()}  ${monthNames[this.createdAt.getMonth()]}  ${this.createdAt.getFullYear()}`;
     delete toSend.createdAt;
     delete toSend.updatedAt;
     return toSend;
