@@ -174,7 +174,16 @@ app.get("/getMonthlyUsers",async (req,res)=>{
         let today=new Date();
         let curMonth=today.getMonth();
         let curYear=today.getFullYear();
-        let users=await User.find({})
+        let users=await User.find({});
+        let monthsRec=[];
+        for(let i=0;i<12;i++){
+            monthRec[i]={
+                count:0,
+                month:1+(curMonth-i+12)%12
+            }
+        }
+        
+        res.send(monthsRec)
 
     }catch(err){
         res.status(404).send(err.message);
