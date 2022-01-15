@@ -160,6 +160,7 @@ app.get("/paymentssTop5",async (req,res)=>{
                 path:"userId",
                 select:"firstName lastName"
             }));
+            console.log(i);
         }
         res.send(payments);
     }catch(err){
