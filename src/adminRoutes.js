@@ -160,6 +160,7 @@ app.get("/paymentssTop5",async (req,res)=>{
             payments[i]=await payment.populate({
                 path:"userId"
             });
+            console.log(payments[i].populated("userId"))
         })
         // console.log(payments)
         res.send(payments);
