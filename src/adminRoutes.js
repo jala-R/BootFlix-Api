@@ -158,7 +158,6 @@ app.get("/paymentssTop5",async (req,res)=>{
         for(let i=0;i<payments.length;i++){
             (await payments[i].populate({
                 path:"userId",
-                select:"firstName lastName"
             }));
             // console.log(i);
         }
