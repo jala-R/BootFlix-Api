@@ -149,16 +149,18 @@ app.get("/usersTop5",async (req,res)=>{
 
 app.get("/paymentssTop5",async (req,res)=>{
     try{
-        let users=await Payment.find({},null,{
+        let payments=await Payment.find({},null,{
             sort:{
                 createdAt:-1
             },
             limit:5
         })
-        for(let i=0;i<5;i++)users[i].populate({
-            path:"userId"
-        })
-        res.send(users);
+        for(let i=0;i<5;i++){
+            await payments[i].populate({
+                path:"userId"
+            })
+        }
+        res.send(payments);
     }catch(err){
         res.status(400).send(err.message)
     }
