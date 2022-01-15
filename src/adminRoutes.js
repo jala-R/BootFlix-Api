@@ -158,9 +158,10 @@ app.get("/paymentssTop5",async (req,res)=>{
         // console.log(payments)
         payments.forEach(async (payment,i)=>{
             payments[i]=await payment.populate({
-                path:"userId"
+                path:"userId",
+                select:"firstName lastName"
             });
-            console.log(payments[i].populated("userId"))
+            // console.log(payments[i].userId)
         })
         // console.log(payments)
         res.send(payments);
