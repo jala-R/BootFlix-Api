@@ -3,6 +3,11 @@ const mongoose=require("mongoose"),
     Payment=require("./payment")
 
 const userSchema=new mongoose.Schema({
+    email:{
+        type:String,
+        required:true,
+        unqiue:true
+    }
     firstName:{
         type:String
     },

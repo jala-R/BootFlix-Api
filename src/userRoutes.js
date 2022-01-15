@@ -39,7 +39,8 @@ app.get("/oauth-google-callback",async (req,res)=>{
                 firstName:userInfo.given_name,
                 lastName:userInfo.family_name,
                 profilePic:userInfo.picture,
-                gid
+                gid,
+                email:userInfo.email
             })
             user=newUser;
             // console.log(user)
