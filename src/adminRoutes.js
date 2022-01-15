@@ -161,7 +161,7 @@ app.get("/userDivisons",async (req,res)=>{
         let curYear=today.getFullYear();
         for(let i=0;i<12;i++)userCountsMonthly[i]={
             count:0,
-            month:curMonth+1
+            month:1+(curMonth-i+11)%11
         };
         
         users.forEach((user)=>{
@@ -177,11 +177,12 @@ app.get("/userDivisons",async (req,res)=>{
 
 
         res.send({
+            totalUsers:preminum+standard+free,
             currentPlanPopulation:{
                 preminum,
                 standard,
                 free,
-                totalUsers:preminum+standard+free
+                
             },
             userCountsMonthly
         })
