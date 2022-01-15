@@ -155,12 +155,12 @@ app.get("/paymentssTop5",async (req,res)=>{
             },
             limit:5
         })
-        for(let i=0;i<5;i++){
+        for(let i=0;i<payments.length;i++){
             (await payments[i].populate({
                 path:"userId",
                 select:"firstName lastName"
             }));
-            console.log(i);
+            // console.log(i);
         }
         res.send(payments);
     }catch(err){
