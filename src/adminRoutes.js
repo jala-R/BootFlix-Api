@@ -244,7 +244,7 @@ app.delete("/movieTrailer/:movieId",loginMiddleware,adminMiddleware,async (req,r
 })
 
 
-app.post()
+
 
 
 module.exports=app;
