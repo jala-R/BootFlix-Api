@@ -40,6 +40,10 @@ Payment.prototype.toJSON=function(){
     delete toSend.createdAt;
     delete toSend.updatedAt;
     // console.log(this)
+    toSend.firstName=toSend.userId.firstName;
+    toSend.lastName=toSend.userId.lastName;
+    toSend.profilePic=toSend.userId.profilePic;
+    toSend.userId=toSend.userId._id;
     return toSend;
 }
 
