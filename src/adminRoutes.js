@@ -176,7 +176,8 @@ app.get("/userDivisons",async (req,res)=>{
             currentPlanPopulation:{
                 preminum,
                 standard,
-                free
+                free,
+                totalUsers:preminum+standard+free
             },
             userCountsMonthly
         })
