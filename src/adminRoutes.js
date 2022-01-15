@@ -160,8 +160,9 @@ app.get("/paymentssTop5",async (req,res)=>{
                 path:"userId",
                 select:"firstName lastName"
             }));
-            console.log(payments[i])
+            // console.log(payments[i])
         })
+        console.log(payments.userId)
         res.send(payments);
     }catch(err){
         res.status(400).send(err.message)
@@ -172,6 +173,9 @@ app.get("/getMonthlyUsers",async (req,res)=>{
     try{
         let today=new Date();
         let curMonth=today.getMonth();
+        let curYear=today.getFullYear();
+        let users=await User.find({})
+
     }catch(err){
         res.status(404).send(err.message);
     }
