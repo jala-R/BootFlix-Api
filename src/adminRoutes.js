@@ -153,35 +153,26 @@ app.get("/users/:id",async (req,res)=>{
 app.get("/userDivisons",async (req,res)=>{
     try{
         let users=await User.find({});
-        let preminum=[],standard=[],free=[];
+        let preminum=0,standard=0,free=0;
         users.forEach((user)=>{
+            console.log(user.createdAt.getFullYear());
             user.planDetails=user.getPlan();
-            if(user.planDetails.plan==="Standard")standard.push(user);
-            else if(user.planDetails.plan==="Preminum")preminum.push(user);
-            else free.push(user);
+            if(user.planDetails.plan==="Standard")standard++;
+            else if(user.planDetails.plan==="Preminum")preminum++;
+            else free++;
         })
-        preminum.sort(function(user1,user2){
-            if(user1.planDetails.days>user2.planDetails.days)return -1;
-            else if(user1.planDetails.days<user2.planDetails.days)return 1;
-            else{
-                if(user1.planDetails.hours>user2.planDetails.hours)return -1;
-                else 1;
-            }
-        })
-        // console.log(preminum)
-        standard.sort(function(user1,user2){
-            if(user1.planDetails.days>user2.planDetails.days)return -1;
-            else if(user1.planDetails.days<user2.planDetails.days)return 1;
-            else{
-                if(user1.planDetails.hours>user2.planDetails.hours)return -1;
-                else 1;
-            }
-        })
+
+
+
+
         res.send({
-            preminum,
-            standard,
-            free
+            currentPlanPopulation:{
+                preminum,
+                standard,
+                free
+            },
         })
+        
     }catch(err){
         res.status(404).send(err.message);
     }
@@ -190,7 +181,7 @@ app.get("/userDivisons",async (req,res)=>{
 
 app.get("/getMonthlyNewUser",async (req,res)=>{
     try{    
-        let count=await User.aggregate([
+        let {count}=await User.aggregate([
             {$project:
                 {
                     month: {
@@ -251,6 +242,9 @@ app.delete("/movieTrailer/:movieId",loginMiddleware,adminMiddleware,async (req,r
         res,status(400).send(err.message)
     }
 })
+
+
+app.post()
 
 
 module.exports=app;
