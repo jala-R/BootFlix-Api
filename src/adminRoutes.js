@@ -95,6 +95,7 @@ app.post("/movie",loginMiddleware,adminMiddleware,async (req,res)=>{
 
 
 app.post("/upload/movie/:movieId",movieParse.single("movie"),(req,res)=>{
+    console.log(req.headers)
     console.log(req.file);
     console.log("movie uploaded")
     res.send();
