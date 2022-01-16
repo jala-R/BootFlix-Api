@@ -80,7 +80,7 @@ app.get("/logout",loginMiddleware,async (req,res)=>{
 })
 
 
-app.get("/movie/:movieId",loginMiddleware,isEligible,(req,res)=>{
+app.get("/movie/:movieId",(req,res)=>{
     // console.log(req.params)
     res.send(`<video width="320" height="240" controls>
     <source src="/movie/${req.params.movieId}/watch" type="video/mp4">
@@ -88,7 +88,7 @@ app.get("/movie/:movieId",loginMiddleware,isEligible,(req,res)=>{
   </video>`)
 })
 
-app.get("/movie/:movieId/watch",loginMiddleware,isEligible,async (req,res)=>{
+app.get("/movie/:movieId/watch",async (req,res)=>{
     let start=Number(req.headers.range.slice(6,req.headers.range.length-1));
     let oneMB=10**6;
     
