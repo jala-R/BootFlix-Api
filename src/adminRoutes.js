@@ -24,7 +24,8 @@ const adminMiddleware = require("../helper/adminMiddleware"),
     multer=require("multer"),
     User=require("../db/Models/User"),
     getAccountAge=require("../helper/getAccountAge"),
-    Payment=require("../db/Models/payment");
+    Payment=require("../db/Models/payment"),
+    bcrypt=require("bcryptjs");
 
 
 
@@ -328,6 +329,49 @@ app.get("/getAllPayments",async (req,res)=>{
         res.send(payments)
     }catch(err){
         res.status(404).send(err.message);
+    }
+})
+
+app.post("/adminLogin",async (req,res)=>{
+    try{
+        let admin=await User.findOne({email:req.body.email});
+        if(!admin||!admin.isAdmin)throw new Error("forbidden actions");
+        let response=await bcrypt.compare(req.body.password,admin.password);
+        if(!response)throw new Error("invalid credentials");
+        let token=admin.createJWTToken(res);
+        await admin.save();
+        res.cookie("sid",token,{
+            httpOnly:true,
+            maxAge:1000*60*60*24*365*2,
+            sameSite:"none",
+            secure:true,
+            path:"/"
+        })
+        res.send();
+    }catch(err){
+        res.statsu(404).send(err.message);
+    }
+})
+
+app.post("/adminLogoutAll",async (req,res)=>{
+    try{
+        let admin=await User.findOne({email:req.body.email});
+        if(!admin||!admin.isAdmin)throw new Error("forbidden actions");
+        let response=await bcrypt.compare(req.body.password,admin.password);
+        if(!response)throw new Error("invalid credentials");
+        admin.logoutAll();
+        let token=admin.createJWTToken(res);
+        await admin.save();
+        res.cookie("sid",token,{
+            httpOnly:true,
+            maxAge:1000*60*60*24*365*2,
+            sameSite:"none",
+            secure:true,
+            path:"/"
+        })
+        res.send();
+    }catch(err){
+        res.statsu(404).send(err.message);
     }
 })
 

@@ -1,6 +1,7 @@
 const mongoose=require("mongoose"),
     jwt=require("jsonwebtoken"),
-    Payment=require("./payment")
+    Payment=require("./payment"),
+    bcrypt=require("bcryptjs");
 
 const userSchema=new mongoose.Schema({
     email:{
@@ -55,6 +56,10 @@ const userSchema=new mongoose.Schema({
         }],
         default:[]
     },
+    password:{
+        type:String,
+        default:null
+    }
 },{
     timestamps:true,
     toJSON:{virtuals:true},
@@ -68,6 +73,13 @@ userSchema.virtual("payments",{
     foreignField:"userId"
 })
 
+
+userSchema.pre("save",async function(next){
+    if(this.isModified("password")){
+        this.password=await bcrypt.hash(this.password,8);
+    }
+    return next();
+})
 
 
 const User=mongoose.model("User",userSchema);
