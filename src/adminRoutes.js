@@ -349,7 +349,7 @@ app.post("/adminLogin",async (req,res)=>{
         })
         res.send(admin);
     }catch(err){
-        res.statsu(404).send(err.message);
+        res.status(404).send(err.message);
     }
 })
 
