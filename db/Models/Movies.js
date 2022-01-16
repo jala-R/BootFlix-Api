@@ -32,27 +32,15 @@ const movieSchema=new mongoose.Schema({
     },
     titleImage:{
         type:String,
-        required:true,
     },
     image:{
         type:String,
-        required:true,
     },
     thumnailImage:{
         type:String,
-        required:true,
-    },
-    movie:{
-        type:String,
-        required:true,
-    },
-    trailer:{
-        type:String,
-        required:true,
     },
     subtitle:{
         type:[String],
-        required:true,
     },
     plan:{
         type:String,

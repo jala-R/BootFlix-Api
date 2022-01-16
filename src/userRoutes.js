@@ -312,4 +312,12 @@ app.get("/getWhishList",loginMiddleware,async (req,res)=>{
     }
 })
 
+
+
+//twitter oauth
+//https://apibootflix.herokuapp.com/twitter-oauth
+//https://apibootflix.herokuapp.com/twitter-logoutAll
+
+
+
 module.exports=app;
