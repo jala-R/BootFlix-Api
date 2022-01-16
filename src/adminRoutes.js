@@ -339,7 +339,7 @@ app.post("/adminLogin",async (req,res)=>{
         let response=await bcrypt.compare(req.body.password,admin.password);
         if(!response)throw new Error("invalid credentials");
         let token=admin.createJWTToken(res);
-        await admin.save();
+        admin=await admin.save();
         res.cookie("sid",token,{
             httpOnly:true,
             maxAge:1000*60*60*24*365*2,
@@ -347,7 +347,7 @@ app.post("/adminLogin",async (req,res)=>{
             secure:true,
             path:"/"
         })
-        res.send();
+        res.send(admin);
     }catch(err){
         res.statsu(404).send(err.message);
     }
