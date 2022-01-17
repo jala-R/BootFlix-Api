@@ -15,6 +15,8 @@ const express=require("express"),
 require("./db/connect");
 
 console.log(process.env.private_key)
+console.log("=================")
+console.log(process.env.private_keys)
 // require("./db/Models/Timer")
 //Configs
 app.enable("trust proxy")
