@@ -36,7 +36,7 @@ class MovieCustomStorage {
             temp+=Buffer.byteLength(chunk);
             console.log(temp);
         })
-        // file.stream.pipe(req.googleClient.bucket("movie-videos").file(req.params.movieId+".mp4").createWriteStream());
+        file.stream.pipe(req.googleClient.bucket("movie-videos").file(req.params.movieId+".mp4").createWriteStream());
         // 
         file.stream.on("end",()=>{
             console.log(`${req.params.movieId+".mp4"} uploaded succesfully`);
@@ -59,7 +59,7 @@ class TrailerCustomStorage {
                 temp+=Buffer.byteLength(chunk);
                 console.log(temp);
             })
-            // file.stream.pipe(req.googleClient.bucket("trailer-videos").file(req.params.movieId+".mp4").createWriteStream());
+            file.stream.pipe(req.googleClient.bucket("trailer-videos").file(req.params.movieId+".mp4").createWriteStream());
             // 
             file.stream.on("end",()=>{
                 console.log(`${req.params.movieId+".mp4"} uploaded succesfully`);
