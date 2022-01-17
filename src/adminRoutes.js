@@ -360,9 +360,9 @@ app.post("/adminLogoutAll",async (req,res)=>{
 
 app.get("/getMovies",async (req,res)=>{
     try{
-        let data=await req.googleClient.bucket("movie-videos").getFiles();
-        console.log(data);
-        res.send(data);
+        // let data=await req.googleClient.bucket("movie-videos").getFiles();
+        console.log(process.env.private_key);
+        res.send(process.env.private_key);
     }catch(err){
         res.status(404).send(err.message);
     }
