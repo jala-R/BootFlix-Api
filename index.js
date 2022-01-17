@@ -14,9 +14,7 @@ const express=require("express"),
     adminRoutes=require("./src/adminRoutes");
 require("./db/connect");
 
-console.log(process.env.private_key)
-console.log("=================")
-console.log(process.env.private_keys)
+console.log(process.env.private_key.replace(/\\n/gm, '\n'))
 // require("./db/Models/Timer")
 //Configs
 app.enable("trust proxy")
