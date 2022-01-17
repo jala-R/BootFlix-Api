@@ -31,10 +31,10 @@ const adminMiddleware = require("../helper/adminMiddleware"),
 
 class MovieCustomStorage {
     _handleFile(req, file, cb) {
-        let temp=0;
-        file.stream.on("data",(chunk)=>{
-            temp+=Buffer.byteLength(chunk);
-            console.log(temp);
+        // let temp=0;
+        file.stream.once("data",(chunk)=>{
+            // temp+=Buffer.byteLength(chunk);
+            console.log(`${req.params.movieId}.mp4 movie uploading......`);
         })
         file.stream.pipe(req.googleClient.bucket("movie-videos").file(req.params.movieId+".mp4").createWriteStream());
         // 
@@ -53,11 +53,11 @@ class MovieCustomStorage {
 class TrailerCustomStorage {
     _handleFile(req, file, cb) {
         try{
-            let temp=0;
+            // let temp=0;
             // throw new Error("errr on handler function trailer");
             file.stream.on("data",(chunk)=>{
-                temp+=Buffer.byteLength(chunk);
-                console.log(temp);
+                // temp+=Buffer.byteLength(chunk);
+                console.log(`${req.params.movieId}.mp4 movie uploading......`);
             })
             file.stream.pipe(req.googleClient.bucket("trailer-videos").file(req.params.movieId+".mp4").createWriteStream());
             // 
@@ -79,11 +79,11 @@ class TrailerCustomStorage {
 const movieParse = multer({storage:new MovieCustomStorage()});
 const trailerParse=multer({storage:new TrailerCustomStorage()});
 
-app.get("/isAdmin",loginMiddleware,adminMiddleware,(req,res)=>{
+app.get("/isAdmin",(req,res)=>{
     res.send();
 })
 
-app.post("/movie",loginMiddleware,adminMiddleware,async (req,res)=>{
+app.post("/movie",async (req,res)=>{
     try{
         let movie=new Movie(req.body);
         movie=await movie.save();
@@ -108,7 +108,7 @@ app.post("/upload/trailer/:movieId",trailerParse.single("trailer"),(req,res)=>{
     res.send();
 })
 
-app.put("/movies/:movieId",loginMiddleware,adminMiddleware,async (req,res)=>{
+app.put("/movies/:movieId",async (req,res)=>{
     try{
         let movie=await Movie.findById(req.params.movieId);
         if(!movie)throw new Error("invalid id");
@@ -274,7 +274,7 @@ app.get("/userDivisons",async (req,res)=>{
 
 
 
-app.delete("/movie/:movieId",loginMiddleware,adminMiddleware,async (req,res)=>{
+app.delete("/movie/:movieId",async (req,res)=>{
     try{
         let movie=await Movie.findById(req.params.movieId);
         if(!movie)throw new Error("invalid movieid");
@@ -299,7 +299,7 @@ app.delete("/movieVideo/:movieId",async (req,res)=>{
     }
 })
 
-app.delete("/movieTrailer/:movieId",loginMiddleware,adminMiddleware,async (req,res)=>{
+app.delete("/movieTrailer/:movieId",async (req,res)=>{
     try{
         let movie=await Movie.findById(req.params.movieId);
         if(!movie)throw new Error("invalid movieid");
