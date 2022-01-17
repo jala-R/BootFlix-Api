@@ -6,10 +6,10 @@ const express=require("express"),
     storage = new Storage({
         projectId:process.env.project_id,
         email:process.env.client_email,
-        // credentials:{
-        //     client_email:process.env.client_email,
-        //     private_key:process.env.private_key
-        // }
+        credentials:{
+            client_email:process.env.client_email,
+            private_key:process.env.private_key
+        }
     }),
     adminRoutes=require("./src/adminRoutes");
 require("./db/connect");
