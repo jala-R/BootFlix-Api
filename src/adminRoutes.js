@@ -289,9 +289,9 @@ app.delete("/movie/:movieId",loginMiddleware,adminMiddleware,async (req,res)=>{
 
 app.delete("/movieVideo/:movieId",async (req,res)=>{
     try{
-        // let movie=await Movie.findById(req.params.movieId);
-        // if(!movie)throw new Error("invalid movieid");
-        // await movie.removeMovie(req.googleClient);
+        let movie=await Movie.findById(req.params.movieId);
+        if(!movie)throw new Error("invalid movieid");
+        await movie.removeMovie(req.googleClient);
         console.log("lolllll")
         res.send();
     }catch(err){
