@@ -294,7 +294,7 @@ app.delete("/movieVideo/:movieId",loginMiddleware,adminMiddleware,async (req,res
         await movie.removeMovie(req.googleClient);
         res.send();
     }catch(err){
-        res,status(400).send(err.message)
+        res.status(400).send(err.message)
     }
 })
 
