@@ -8,13 +8,13 @@ const express=require("express"),
         email:process.env.client_email,
         credentials:{
             client_email:process.env.client_email,
-            private_key:process.env.private_key
+            private_key:process.env.private_key.replace(/\\n/gm, '\n')
         }
     }),
     adminRoutes=require("./src/adminRoutes");
 require("./db/connect");
 
-console.log(process.env.private_key.replace(/\\n/gm, '\n'))
+
 // require("./db/Models/Timer")
 //Configs
 app.enable("trust proxy")
