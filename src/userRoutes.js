@@ -344,6 +344,7 @@ app.get("/twitter-oauth",async (req,res)=>{
                 "Authorization":`Bearer ${response.access_token}`
             }
         })
+        console.log(userInfo)
         let tid=userInfo.id;
         let user=await User.findOne({tid});
         if(!user){
@@ -368,7 +369,7 @@ app.get("/twitter-oauth",async (req,res)=>{
         res.redirect("https://bootflix.herokuapp.com");
         
     }catch(err){
-        // console.log(err);
+        console.log(err);
         res.status(404).send(err.message);
     }
 })
