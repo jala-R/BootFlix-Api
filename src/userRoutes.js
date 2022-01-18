@@ -325,7 +325,7 @@ app.get("/twitter-oauth-link",async (req,res)=>{
 app.get("/twitter-oauth",async (req,res)=>{
     try{
         let data1=req.query;
-        if(error)return res.redirect("https://bootflix.herokuapp.com");
+        // if(data1.error)return res.redirect("https://bootflix.herokuapp.com");
         let {data}=await axios({
             method:"post",
             url:"https://api.twitter.com/2/oauth2/token",
