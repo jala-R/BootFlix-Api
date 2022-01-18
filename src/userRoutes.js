@@ -338,7 +338,7 @@ app.get("/twitter-oauth",async (req,res)=>{
         console.log(response.access_token);
         let {data}=await axios({
             method:"get",
-            url:"https://api.twitter.com/2/users/mehttps://api.twitter.com/2/tweets?ids=1261326399320715264,1278347468690915330",
+            url:"https://api.twitter.com/2/users/by?usernames=jala",
             headers:{
                 "Authorization":`Bearer ${response.access_token}`
             }
@@ -350,5 +350,7 @@ app.get("/twitter-oauth",async (req,res)=>{
         res.status(404).send(err.message);
     }
 })
+
+// curl -H "Authorization: Bearer VjkyMnZ2OUlmWEhVcWdjWUNmUmpienR3cGVYNUYzRllEZVdQNlJ4eVc1b1BvOjE2NDI1MjMxNjMyMzM6MToxOmF0OjE" ""
 
 module.exports=app;
