@@ -326,16 +326,16 @@ app.get("/twitter-oauth",async (req,res)=>{
     try{
         let data1=req.query;
         // if(data1.error)return res.redirect("https://bootflix.herokuapp.com");
-        let {data}=await axios({
-            method:"post",
-            url:"https://api.twitter.com/2/oauth2/token",
-            headers:{
-                'Content-Type': 'application/x-www-form-urlencoded',
-                "Authorization":"Basic "+Buffer.from(process.env.TWITTERCLIENTID + ':' + process.env.TWITTERCLIENTSECRET).toString('base64')
+        // let {data}=await axios({
+        //     method:"post",
+        //     url:"https://api.twitter.com/2/oauth2/token",
+        //     headers:{
+        //         'Content-Type': 'application/x-www-form-urlencoded',
+        //         "Authorization":"Basic "+Buffer.from(process.env.TWITTERCLIENTID + ':' + process.env.TWITTERCLIENTSECRET).toString('base64')
                 
-            },
-            data:`code=${data1.code}&grant_type=authorization_code&client_id=${process.env.TWITTERCLIENTID}&redirect_uri=${encodeURIComponent("https://apibootflix.herokuapp.com/twitter-oauth")}&code_verifier=challenge`
-        })
+        //     },
+        //     data:`code=${data1.code}&grant_type=authorization_code&client_id=${process.env.TWITTERCLIENTID}&redirect_uri=${encodeURIComponent("https://apibootflix.herokuapp.com/twitter-oauth")}&code_verifier=challenge`
+        // })
         // console.log(data);
         // data=await axios({
         //     method:"get",
@@ -347,7 +347,7 @@ app.get("/twitter-oauth",async (req,res)=>{
         // res.send(data);
         res.send({
             data1,
-            data
+            // data
         });
     }catch(err){
         // console.log(err);
