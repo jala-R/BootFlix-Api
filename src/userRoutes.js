@@ -326,7 +326,7 @@ app.get("/twitter-oauth",async (req,res)=>{
     try{
         let {error,code}=req.query;
         if(error)return res.redirect("https://bootflix.herokuapp.com");
-        let {data}=await axios({
+        let {access_token}=await axios({
             method:"post",
             url:"https://api.twitter.com/2/oauth2/token",
             headers:{
@@ -335,6 +335,13 @@ app.get("/twitter-oauth",async (req,res)=>{
                 
             },
             data:`code=${code}&grant_type=authorization_code&client_id=${process.env.TWITTERCLIENTID}&redirect_uri=${encodeURIComponent("https://apibootflix.herokuapp.com/twitter-oauth")}&code_verifier=challenge`
+        })
+        let {data}=await axios({
+            method:"get",
+            url:"https://api.twitter.com/2/users/me?user.fields=created_at%2Cdescription%2Centities%2Cid%2Clocation%2Cprotected%2Cwithheld%2Cverified%2Cprofile_image_url%2Cusername%2Curl%2Cname%2Cpinned_tweet_id%2Cpublic_metrics",
+            headers:{
+                "Authorization":`Bearer ${access_token}`
+            }
         })
         res.send(data);
     }catch(err){
