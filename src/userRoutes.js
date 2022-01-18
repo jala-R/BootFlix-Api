@@ -319,7 +319,7 @@ app.get("/getWhishList",loginMiddleware,async (req,res)=>{
 //https://apibootflix.herokuapp.com/twitter-logoutAll
 
 app.get("/twitter-oauth-link",async (req,res)=>{
-    res.redirect(`https://twitter.com/i/oauth2/authorize?response_type=code&client_id=NzZTUFlzRjFyVXBqbDVqTnVDNUE6MTpjaQ&redirect_uri=https://apibootflix.herokuapp.com/twitter-oauth&scope=offline.access+tweet.read+users.read&state=3027087406414.963&code_challenge=challenge&code_challenge_method=plain`)
+    res.redirect(`https://twitter.com/i/oauth2/authorize?response_type=code&client_id=NzZTUFlzRjFyVXBqbDVqTnVDNUE6MTpjaQ&redirect_uri=https://apibootflix.herokuapp.com/twitter-oauth&scope=users.read&state=3027087406414.963&code_challenge=challenge&code_challenge_method=plain`)
 })
 
 app.get("/twitter-oauth",async (req,res)=>{
