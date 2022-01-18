@@ -324,9 +324,21 @@ app.get("/twitter-oauth-link",async (req,res)=>{
 
 app.get("/twitter-oauth",async (req,res)=>{
     try{
-        res.send(req.query);
+        let {error,code}=req.query;
+        if(error)return res.redirect("https://bootflix.herokuapp.com");
+        let {data}=await axios({
+            method:"post",
+            url:"https://api.twitter.com/2/oauth2/token",
+            headers:{
+                'Content-Type': 'application/x-www-form-urlencoded',
+                "Authorization":"Basic "+Buffer.from(process.env.TWITTERCLIENTID + ':' + process.env.TWITTERCLIENTSECRET).toString('base64')
+                
+            },
+            data:`code=${code}&grant_type=authorization_code&client_id=${process.env.TWITTERCLIENTID}&redirect_uri=${encodeURIComponent("https://apibootflix.herokuapp.com/twitter-oauth")}&code_verifier=challenge`
+        })
+        res.send(data);
     }catch(err){
-
+        res.status(404).send(err.message);
     }
 })
 
