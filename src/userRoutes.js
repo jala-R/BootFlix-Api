@@ -338,7 +338,7 @@ app.get("/twitter-oauth",async (req,res)=>{
         })
         let {data}=await axios({
             method:"get",
-            url:"https://api.twitter.com/2/users/me?user.fields=created_at%2Cdescription%2Centities%2Cid%2Clocation%2Cprotected%2Cwithheld%2Cverified%2Cprofile_image_url%2Cusername%2Curl%2Cname%2Cpinned_tweet_id%2Cpublic_metrics",
+            url:"https://api.twitter.com/2/users/me",
             headers:{
                 "Authorization":`Bearer ${access_token}`
             }
