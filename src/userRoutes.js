@@ -356,7 +356,6 @@ app.get("/twitter-oauth",async (req,res)=>{
             user=newUser;
             // console.log(user)
         }
-        user.logoutAll();
         let token=user.createJWTToken();
         await user.save();
         res.cookie("sid",token,{
