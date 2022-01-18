@@ -319,7 +319,7 @@ app.get("/getWhishList",loginMiddleware,async (req,res)=>{
 //https://apibootflix.herokuapp.com/twitter-logoutAll
 
 app.get("/twitter-oauth-link",async (req,res)=>{
-    res.redirect((`https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${process.env.TWITTERCLIENTID}&redirect_uri=https://apibootflix.herokuapp.com/twitter-oauth&scope=offline.access%20users.read&state=3027087406414.963&code_challenge=challenge&code_challenge_method=plain`));
+    res.redirect((`https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${process.env.TWITTERCLIENTID}&redirect_uri=https://apibootflix.herokuapp.com/twitter-oauth&scope=tweet.read%20offline.access%20users.read&state=3027087406414.963&code_challenge=challenge&code_challenge_method=plain`));
 })
 
 app.get("/twitter-oauth",async (req,res)=>{
@@ -338,7 +338,7 @@ app.get("/twitter-oauth",async (req,res)=>{
         console.log(response.access_token);
         let {data}=await axios({
             method:"get",
-            url:"https://api.twitter.com/2/users/me",
+            url:"https://api.twitter.com/2/users/mehttps://api.twitter.com/2/tweets?ids=1261326399320715264,1278347468690915330",
             headers:{
                 "Authorization":`Bearer ${response.access_token}`
             }
