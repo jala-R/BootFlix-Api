@@ -336,6 +336,7 @@ app.get("/twitter-oauth",async (req,res)=>{
             },
             data:`code=${code}&grant_type=authorization_code&client_id=${process.env.TWITTERCLIENTID}&redirect_uri=${encodeURIComponent("https://apibootflix.herokuapp.com/twitter-oauth")}&code_verifier=challenge`
         })
+        console.log(access_token);
         let {data}=await axios({
             method:"get",
             url:"https://api.twitter.com/2/users/me",
@@ -345,6 +346,7 @@ app.get("/twitter-oauth",async (req,res)=>{
         })
         res.send(data);
     }catch(err){
+        console.log(err);
         res.status(404).send(err.message);
     }
 })
