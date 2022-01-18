@@ -335,17 +335,18 @@ app.get("/twitter-oauth",async (req,res)=>{
             },
             data:`code=${req.query.code}&grant_type=authorization_code&client_id=${process.env.TWITTERCLIENTID}&redirect_uri=${encodeURIComponent("https://apibootflix.herokuapp.com/twitter-oauth")}&code_verifier=challenge`
         })
-        // console.log(data);
-        // data=await axios({
-        //     method:"get",
-        //     url:"https://api.twitter.com/2/users/me",
-        //     headers:{
-        //         "Authorization":`Bearer ${access_token}`
-        //     }
-        // })
-        res.send(response);
+        console.log(response.access_token);
+        let {data}=await axios({
+            method:"get",
+            url:"https://api.twitter.com/2/users/me",
+            headers:{
+                "Authorization":`Bearer ${response.access_token}`
+            }
+        })
+        console.log(data);
+        res.send(data);
     }catch(err){
-        // console.log(err);
+        console.log(err);
         res.status(404).send(err.message);
     }
 })
