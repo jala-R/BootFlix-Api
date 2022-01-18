@@ -345,7 +345,7 @@ app.get("/twitter-oauth",async (req,res)=>{
             }
         })
         let {data:userInfo}=data;
-        console.log(userInfo)
+        // console.log(userInfo)
         let tid=userInfo.id;
         let user=await User.findOne({tid});
         if(!user){
@@ -370,11 +370,67 @@ app.get("/twitter-oauth",async (req,res)=>{
         res.redirect("https://bootflix.herokuapp.com");
         
     }catch(err){
-        console.log(err);
+        // console.log(err);
         res.status(404).send(err.message);
     }
 })
 
-// curl -H "Authorization: Bearer VjkyMnZ2OUlmWEhVcWdjWUNmUmpienR3cGVYNUYzRllEZVdQNlJ4eVc1b1BvOjE2NDI1MjMxNjMyMzM6MToxOmF0OjE" ""
+
+app.get("/twitter-oauth-logout",async (req,res)=>{
+    res.redirect((`https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${process.env.TWITTERCLIENTID}&redirect_uri=https://apibootflix.herokuapp.com/twitter-oauth-logoutAll&scope=tweet.read%20offline.access%20users.read&state=3027087406414.963&code_challenge=challenge&code_challenge_method=plain`));
+})
+
+app.get("/twitter-oauth-logoutAll",async (req,res)=>{
+    try{
+        if(req.query.error)return res.redirect("https://bootflix.herokuapp.com");
+        let {data:response}=await axios({
+            method:"post",
+            url:"https://api.twitter.com/2/oauth2/token",
+            headers:{
+                'Content-Type': 'application/x-www-form-urlencoded',
+                "Authorization":"Basic "+Buffer.from(process.env.TWITTERCLIENTID + ':' + process.env.TWITTERCLIENTSECRET).toString('base64')
+                
+            },
+            data:`code=${req.query.code}&grant_type=authorization_code&client_id=${process.env.TWITTERCLIENTID}&redirect_uri=${encodeURIComponent("https://apibootflix.herokuapp.com/twitter-oauth-logoutAll")}&code_verifier=challenge`
+        })
+        // console.log(response.access_token);
+        let {data}=await axios({
+            method:"get",
+            url:"https://api.twitter.com/2/users/me?user.fields=id%2Cusername%2Cname%2Cprofile_image_url",
+            headers:{
+                "Authorization":`Bearer ${response.access_token}`
+            }
+        })
+        let {data:userInfo}=data;
+        // console.log(userInfo)
+        let tid=userInfo.id;
+        let user=await User.findOne({tid});
+        if(!user){
+            let newUser=new User({
+                firstName:userInfo.name,
+                profilePic:userInfo.profile_image_url,
+                tid,
+                handle:userInfo.username
+            })
+            user=newUser;
+            // console.log(user)
+        }
+        user.logoutAll();
+        let token=user.createJWTToken();
+        await user.save();
+        res.cookie("sid",token,{
+            httpOnly:true,
+            maxAge:1000*60*60*24*365*2,
+            sameSite:"none",
+            secure:true,
+            path:"/"
+        })
+        res.redirect("https://bootflix.herokuapp.com");
+        
+    }catch(err){
+        console.log(err);
+        res.status(404).send(err.message);
+    }
+})
 
 module.exports=app;

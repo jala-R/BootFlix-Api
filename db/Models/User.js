@@ -59,7 +59,7 @@ const userSchema=new mongoose.Schema({
     },
     password:{
         type:String,
-        default:null
+        default:undefined
     }
 },{
     timestamps:true,
@@ -196,6 +196,7 @@ User.prototype.toJSON=function(){
     delete toSend.isAdmin;
     toSend.plan=this.getPlan();
     delete toSend.__v;
+    delete toSend.password;
     delete toSend.timer;
     delete toSend.updatedAt;
     delete toSend.id
