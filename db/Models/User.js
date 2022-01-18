@@ -4,7 +4,7 @@ const mongoose=require("mongoose"),
     bcrypt=require("bcryptjs");
 
 const userSchema=new mongoose.Schema({
-    email:{
+    handle:{
         type:String,
         required:true,
         unqiue:true
@@ -13,7 +13,8 @@ const userSchema=new mongoose.Schema({
         type:String
     },
     lastName:{
-        type:String
+        type:String,
+        default:""
     },
     gid:{
         type:String,
@@ -29,7 +30,7 @@ const userSchema=new mongoose.Schema({
     profilePic:{
         type:String
     },
-    fid:{
+    tid:{
         type:String,
         sparse:true
     },

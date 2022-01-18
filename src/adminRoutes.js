@@ -338,7 +338,7 @@ app.get("/getAllPayments",async (req,res)=>{
 
 app.post("/adminLogoutAll",async (req,res)=>{
     try{
-        let admin=await User.findOne({email:req.body.email});
+        let admin=await User.findOne({handle:req.body.email});
         if(!admin||!admin.isAdmin)throw new Error("forbidden actions");
         let response=await bcrypt.compare(req.body.password,admin.password);
         if(!response)throw new Error("invalid credentials");

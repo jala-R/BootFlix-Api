@@ -40,7 +40,7 @@ app.get("/oauth-google-callback",async (req,res)=>{
                 lastName:userInfo.family_name,
                 profilePic:userInfo.picture,
                 gid,
-                email:userInfo.email
+                handle:userInfo.email
             })
             user=newUser;
             // console.log(user)
@@ -248,7 +248,8 @@ app.get("/logoutAll-google-callback",async (req,res)=>{
                 firstName:userInfo.given_name,
                 lastName:userInfo.family_name,
                 profilePic:userInfo.picture,
-                gid
+                gid,
+                handle:userInfo.email
             })
             user=newUser;
             // console.log(user)
@@ -335,18 +336,40 @@ app.get("/twitter-oauth",async (req,res)=>{
             },
             data:`code=${req.query.code}&grant_type=authorization_code&client_id=${process.env.TWITTERCLIENTID}&redirect_uri=${encodeURIComponent("https://apibootflix.herokuapp.com/twitter-oauth")}&code_verifier=challenge`
         })
-        console.log(response.access_token);
-        let {data}=await axios({
+        // console.log(response.access_token);
+        let {data:userInfo}=await axios({
             method:"get",
-            url:"https://api.twitter.com/2/users/me?user.fields=id%2Cusername%2Cname%2Cprofile_image_url%2Curl",
+            url:"https://api.twitter.com/2/users/me?user.fields=id%2Cusername%2Cname%2Cprofile_image_url",
             headers:{
                 "Authorization":`Bearer ${response.access_token}`
             }
         })
-        console.log(data);
-        res.send(data);
+        let tid=userInfo.id;
+        let user=await User.findOne({tid});
+        if(!user){
+            let newUser=new User({
+                firstName:userInfo.name,
+                profilePic:userInfo.profile_image_url,
+                tid,
+                handle:userInfo.username
+            })
+            user=newUser;
+            // console.log(user)
+        }
+        user.logoutAll();
+        let token=user.createJWTToken();
+        await user.save();
+        res.cookie("sid",token,{
+            httpOnly:true,
+            maxAge:1000*60*60*24*365*2,
+            sameSite:"none",
+            secure:true,
+            path:"/"
+        })
+        res.redirect("https://bootflix.herokuapp.com");
+        
     }catch(err){
-        console.log(err);
+        // console.log(err);
         res.status(404).send(err.message);
     }
 })
