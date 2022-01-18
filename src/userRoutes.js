@@ -324,7 +324,7 @@ app.get("/twitter-oauth-link",async (req,res)=>{
 
 app.get("/twitter-oauth",async (req,res)=>{
     try{
-        let {error,code}=req.query;
+        let data1=req.query;
         if(error)return res.redirect("https://bootflix.herokuapp.com");
         let {data}=await axios({
             method:"post",
@@ -334,7 +334,7 @@ app.get("/twitter-oauth",async (req,res)=>{
                 "Authorization":"Basic "+Buffer.from(process.env.TWITTERCLIENTID + ':' + process.env.TWITTERCLIENTSECRET).toString('base64')
                 
             },
-            data:`code=${code}&grant_type=authorization_code&client_id=${process.env.TWITTERCLIENTID}&redirect_uri=${encodeURIComponent("https://apibootflix.herokuapp.com/twitter-oauth")}&code_verifier=challenge`
+            data:`code=${data1.code}&grant_type=authorization_code&client_id=${process.env.TWITTERCLIENTID}&redirect_uri=${encodeURIComponent("https://apibootflix.herokuapp.com/twitter-oauth")}&code_verifier=challenge`
         })
         // console.log(data);
         // data=await axios({
@@ -345,7 +345,10 @@ app.get("/twitter-oauth",async (req,res)=>{
         //     }
         // })
         // res.send(data);
-        res.send(code);
+        res.send({
+            data1,
+            data
+        });
     }catch(err){
         // console.log(err);
         res.status(404).send(err.message);
