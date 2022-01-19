@@ -25,9 +25,14 @@ const adminMiddleware = require("../helper/adminMiddleware"),
     User=require("../db/Models/User"),
     getAccountAge=require("../helper/getAccountAge"),
     Payment=require("../db/Models/payment"),
-    bcrypt=require("bcryptjs");
+    bcrypt=require("bcryptjs"),
+    fs=require("fs"),
+    {Readable}=require("stream");
 
-
+function getFileExtensions(str){
+    let ans=str.slice(str.indexOf("/")+1);
+    return ans;
+}
 
 class MovieCustomStorage {
     _handleFile(req, file, cb) {
@@ -48,6 +53,7 @@ class MovieCustomStorage {
         })
     }
 }
+
 
 
 class TrailerCustomStorage {
@@ -358,13 +364,67 @@ app.post("/adminLogoutAll",async (req,res)=>{
     }
 })
 
-app.get("/getMovies",async (req,res)=>{
-    try{
-        let data=await req.googleClient.bucket("movie-videos").getFiles();
-        res.send(data);
-    }catch(err){
-        res.status(404).send(err.message);
+
+
+
+
+class ImageCustomStorage {
+    _handleFile(req, file, cb) {
+        let fileName=`${req.params.movieId}-${file.fieldname}.${getFileExtensions(file.mimetype)}`;
+
+        file.stream.once("data",(chunk)=>{
+            console.log(`${fileName} uploading....`)
+        })
+
+        file.stream.pipe(req.googleClient.bucket("movie-images").file(fileName).createWriteStream());
+
+        // file.stream.pipe(req.googleClient.bucket("movie-videos").file(req.params.movieId+".mp4").createWriteStream());
+        // // 
+        file.stream.on("end",()=>{
+            console.log(`uploaded succesfully`);
+            if(!req.savedFiles){
+                req.savedFiles={}
+            }
+            req.savedFiles[file.fieldname]=fileName;
+            cb(null,{});
+        })
+
+        file.stream.on("error",(err)=>{
+            console.log(err.message);
+            cb(null,{});
+        })
     }
+}
+
+app.post("/upload-movie-images/:movieId",multer({storage:new ImageCustomStorage()}).fields([
+    {
+        name:"image",
+        maxCount:1
+    },
+    {
+        name:"titleImage",
+        maxCount:1
+    },
+    {
+        name:"thumnailImage",
+        maxCount:1
+    }
+]),async (req,res)=>{
+    try{
+        let movie=await Movie.findById(req.params.movieId);
+        if(!movie)throw new Error("invalid movieid");
+        movie.image=req.savedFiles.image;
+        movie.titleImage=req.savedFiles.titleImage;
+        movie.thumnailImage=req.savedFiles.thumnailImage;
+        await movie.save();
+        res.send(req.savedFiles);
+    }catch(err){
+        res.status(404).send(err.message)
+    }
+},(err,req,res,next)=>{
+    res.status(404).send(err.message);
 })
+
+
 
 module.exports=app;
