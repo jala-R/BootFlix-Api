@@ -53,6 +53,14 @@ const movieSchema=new mongoose.Schema({
 
 const Movie=mongoose.model("movie",movieSchema);
 
+Movie.prototype.toJSON=function(){
+    // console.log("lolll")
+    let toSend=this.toObject();
+    delete toSend.createdAt,
+    delete toSend.updatedAt;
+    return toSend;
+}
+
 Movie.prototype.removeMovie=async function(googleClient){
     await googleClient.bucket("movie-videos").file(this._id+".mp4").delete();
 }

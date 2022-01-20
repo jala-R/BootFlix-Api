@@ -433,4 +433,64 @@ app.get("/twitter-oauth-logoutAll",async (req,res)=>{
     }
 })
 
+app.get("/list-movies",async (req,res)=>{
+    try{
+        let {search,genre,language}=req.query;
+        let gotQuery=search||genre||language||false;
+        let stages=[{
+            $match:{
+                $and:[
+
+                ]
+            }
+        }];
+        if(genre){
+            stages[0]["$match"]["$and"].push({
+                genre:{$regex:"^"+genre+"$",$options:"imx"}
+            })
+        }
+
+        if(language){
+            stages[0]["$match"]["$and"].push({
+                language:{$regex:"^"+language+"$",$options:"imx"}
+            })
+        }
+        if(search){
+            let dup=search;
+            search="\\s*";
+            for(let i=0;i<dup.length;i++){
+                // console.log()
+                search+=dup[i];
+                search+="\\s*"
+            }
+            // console.log(search)
+            stages[0]["$match"]["$and"].push({
+                movieName:{$regex:search,$options:"ix"}
+            })
+        }
+        let result;
+        if(!gotQuery){
+            result=await Movie.find({},null,{
+                sort:{
+                    year:-1
+                }
+            })
+        }else{
+            stages.push({
+                $sort:{
+                    year:-1
+                }
+            })
+            result=await Movie.aggregate(stages)
+        }
+        
+        res.send({
+            result
+        });
+    }catch(err){
+        res.status(404).send(err.message);
+    }
+})
+
+
 module.exports=app;
