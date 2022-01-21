@@ -493,4 +493,19 @@ app.get("/list-movies",async (req,res)=>{
 })
 
 
+app.get("/get-images/:imageName",async (req,res)=>{
+    try{
+        // console.log(req.params.)
+        
+        let  data=await req.googleClient.bucket("movie-images").file(req.params.imageName).getMetadata();
+        res.set("Content-Type",data[0].contentType)
+        let stream=await req.googleClient.bucket("movie-images").file(req.params.imageName).createReadStream()
+        stream.pipe(res);
+    }catch(err){
+        console.log(err)
+        res.status(404).send(err.message);
+    }
+})
+
+
 module.exports=app;

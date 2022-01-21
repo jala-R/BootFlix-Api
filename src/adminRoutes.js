@@ -101,8 +101,8 @@ app.post("/movie",async (req,res)=>{
 
 
 app.post("/upload/movie/:movieId",movieParse.single("movie"),(req,res)=>{
-    console.log(req.headers)
-    console.log(req.file);
+    // console.log(req.headers)
+    // console.log(req.file);
     console.log("movie uploaded")
     res.send();
 })
@@ -424,6 +424,8 @@ app.post("/upload-movie-images/:movieId",multer({storage:new ImageCustomStorage(
 },(err,req,res,next)=>{
     res.status(404).send(err.message);
 })
+
+
 
 
 
