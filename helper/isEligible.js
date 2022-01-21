@@ -3,6 +3,7 @@ const Movie=require("../db/Models/Movies");
 
 async function isEligible(req,res,next){
     try{
+        return next();
         let movie=await Movie.findById(req.params.movieId);
         if(!movie)throw new Error("invalid movie");
         let movieLvl=movie.plan;
