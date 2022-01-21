@@ -61,9 +61,9 @@ class TrailerCustomStorage {
         try{
             // let temp=0;
             // throw new Error("errr on handler function trailer");
-            file.stream.on("data",(chunk)=>{
+            file.stream.once("data",(chunk)=>{
                 // temp+=Buffer.byteLength(chunk);
-                console.log(`${req.params.movieId}.mp4 movie uploading......`);
+                console.log(`${req.params.movieId}.mp4 trailer uploading......`);
             })
             file.stream.pipe(req.googleClient.bucket("trailer-videos").file(req.params.movieId+".mp4").createWriteStream());
             // 
