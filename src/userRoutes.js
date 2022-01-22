@@ -502,10 +502,30 @@ app.get("/get-images/:imageName",async (req,res)=>{
         let stream=await req.googleClient.bucket("movie-images").file(req.params.imageName).createReadStream()
         stream.pipe(res);
     }catch(err){
-        console.log(err)
+        // console.log(err)
         res.status(404).send(err.message);
     }
 })
 
+
+app.get("/movie-genrewise",async (req,res)=>{
+    try{
+        let movies=await Movie.find({},null,{
+            sort:{
+                year:-1
+            }
+        });
+        let result={};
+        movies.forEach(movie=>{
+            movie.genre.forEach(genre=>{
+                if(result[genre])result[genre].push(movie);
+                else result[genre]=[movie]
+            })
+        })
+        res.send(result);
+    }catch(err){
+        res.status(404).send(err.message);
+    }
+})
 
 module.exports=app;
