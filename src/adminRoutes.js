@@ -289,7 +289,7 @@ app.delete("/movie/:movieId",async (req,res)=>{
         await movie.remove();
         res.send();
     }catch(err){
-        res,status(400).send(err.message)
+        res.status(400).send(err.message)
     }
 })
 
@@ -312,7 +312,7 @@ app.delete("/movieTrailer/:movieId",async (req,res)=>{
         await movie.removeTrailer(req.googleClient);
         res.send();
     }catch(err){
-        res,status(400).send(err.message)
+        res.status(400).send(err.message)
     }
 })
 
