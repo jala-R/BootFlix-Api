@@ -153,7 +153,9 @@ User.prototype.getPlan=function(){
         let days=(diff-hours)/(60*60*24);
         hours/=(60*60)
         hours=Math.floor(hours)
-        return {plan,days,hours,exp}
+        let date=new Date(exp*1000);
+
+        return {plan,days,hours,day:date.getDate(),month:date.getMonth()+1,year:date.getFullYear()};
     }catch(err){
         return {plan:"Free"}
     }
