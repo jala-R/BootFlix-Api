@@ -155,7 +155,7 @@ User.prototype.getPlan=function(){
         hours=Math.floor(hours)
         let date=new Date(exp*1000);
 
-        return {plan,days,hours,day:date.getDate(),month:date.getMonth()+1,year:date.getFullYear()};
+        return {plan,days,hours,expiryDate:date.getDate(),expiryMonth:date.getMonth()+1,expiryYear:date.getFullYear()};
     }catch(err){
         return {plan:"Free"}
     }
