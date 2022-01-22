@@ -114,13 +114,15 @@ app.post("/upload/trailer/:movieId",trailerParse.single("trailer"),(req,res)=>{
     res.send();
 })
 
-app.put("/movies/:movieId",async (req,res)=>{
+app.put("/movie/:movieId",async (req,res)=>{
     try{
+        // console.log("lollll")
         let movie=await Movie.findById(req.params.movieId);
         if(!movie)throw new Error("invalid id");
-        for(let i in Object.keys(req.body)){
-            movie.i=req.body.i;
-        }
+        Object.keys(req.body).forEach(data=>{
+            movie.set(data,req.body[data]);
+        })
+        // console.log(movie)
         movie=await movie.save();
         res.send(movie)
     }catch(err){
