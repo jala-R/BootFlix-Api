@@ -292,7 +292,7 @@ app.get("/addMovieToWhislist/:movieId",loginMiddleware,async (req,res)=>{
     }
 })
 
-app.get("/addMovieFromWhislist/:movieId",loginMiddleware,async (req,res)=>{
+app.get("/removeMovieFromWhislist/:movieId",loginMiddleware,async (req,res)=>{
     try{
         let movie=await User.findById(req.params.movieId);
         if(!movie)throw new Error("invalid movie id");

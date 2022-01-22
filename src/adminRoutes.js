@@ -36,10 +36,10 @@ function getFileExtensions(str){
 
 class MovieCustomStorage {
     _handleFile(req, file, cb) {
-        // let temp=0;
-        file.stream.once("data",(chunk)=>{
-            // temp+=Buffer.byteLength(chunk);
-            console.log(`${req.params.movieId}.mp4 movie uploading......`);
+        let temp=0;
+        file.stream.on("data",(chunk)=>{
+            temp+=Buffer.byteLength(chunk);
+            console.log(temp);
         })
         file.stream.pipe(req.googleClient.bucket("movie-videos").file(req.params.movieId+".mp4").createWriteStream());
         // 

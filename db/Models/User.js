@@ -41,7 +41,7 @@ const userSchema=new mongoose.Schema({
         type:Map,
         of:{
             type:mongoose.SchemaTypes.ObjectId,
-            ref:"User"
+            ref:"movie"
         },
         default:{}
     },
