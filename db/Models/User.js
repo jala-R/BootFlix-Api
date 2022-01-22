@@ -153,7 +153,7 @@ User.prototype.getPlan=function(){
         let days=(diff-hours)/(60*60*24);
         hours/=(60*60)
         hours=Math.floor(hours)
-        return {plan,days,hours}
+        return {plan,days,hours,exp}
     }catch(err){
         return {plan:"Free"}
     }
