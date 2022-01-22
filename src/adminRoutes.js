@@ -334,6 +334,11 @@ app.get("/getAllPayments",async (req,res)=>{
                 createdAt:-1
             }
         })
+        for(let i=0;i<payments.length;i++){
+            await payments[i].populate({
+                path:"userId",
+            })
+        }
         res.send(payments)
     }catch(err){
         res.status(404).send(err.message);
