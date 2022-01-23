@@ -522,7 +522,14 @@ app.get("/movie-genrewise",async (req,res)=>{
                 else result[genre]=[movie]
             })
         })
-        res.send(result);
+        let response=[];
+        Object.keys(result).forEach(genre=>{
+            response.push({
+                genre,
+                value:result[genre]
+            })
+        })
+        res.send(response);
     }catch(err){
         res.status(404).send(err.message);
     }
