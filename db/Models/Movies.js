@@ -46,6 +46,14 @@ const movieSchema=new mongoose.Schema({
         type:String,
         required:true,
         enum:["Free","Standard","Preminum"]
+    },
+    movieUploded:{
+        type:Boolean,
+        default:false
+    },
+    trailerUploded:{
+        type:Boolean,
+        default:false
     }
 },{
     timestamps:true
@@ -62,10 +70,14 @@ Movie.prototype.toJSON=function(){
 }
 
 Movie.prototype.removeMovie=async function(googleClient){
+    this.movieUploded=false;
+    await this.save();
     await googleClient.bucket("movie-videos").file(this._id+".mp4").delete();
 }
 
 Movie.prototype.removeTrailer=async function(googleClient){
+    this.trailerUploded=false;
+    await this.save();
     await googleClient.bucket("trailer-videos").file(this._id+".mp4").delete();
 }
 

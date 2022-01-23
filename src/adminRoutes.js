@@ -104,18 +104,30 @@ app.post("/movie",async (req,res)=>{
 })
 
 
-app.post("/upload/movie/:movieId",movieParse.single("movie"),(req,res)=>{
-    // console.log(req.headers)
-    // console.log(req.file);
-    console.log("movie uploaded")
-    res.send();
+app.post("/upload/movie/:movieId",movieParse.single("movie"),async (req,res)=>{
+
+    try{
+        let movie=await Movie.findById(req.params.movieId);
+        movie.movieUploded=true;
+        movie.save();
+        console.log("movie uploaded....");
+        res.send();
+    }catch(err){
+        res.status(404).send(err.message);
+    }
 })
 
 
-app.post("/upload/trailer/:movieId",trailerParse.single("trailer"),(req,res)=>{
-    console.log("trailer uploaded")
-    // throw new Error("errorrr")
-    res.send();
+app.post("/upload/trailer/:movieId",trailerParse.single("trailer"),async (req,res)=>{
+    try{
+        let movie=await Movie.findById(req.params.movieId);
+        movie.trailerUploded=true;
+        movie.save();
+        console.log("trailer uploaded....");
+        res.send();
+    }catch(err){
+        res.status(404).send(err.message);
+    }
 })
 
 app.put("/movie/:movieId",async (req,res)=>{
