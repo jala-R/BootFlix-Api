@@ -195,7 +195,7 @@ User.prototype.toJSON=function(){
     let toSend=this.toObject();
     // delete toSend._id;
     toSend.whislist=JSON.stringify(this.whislist)
-    console.log(toSend.whislist)
+    // console.log(toSend.whislist)
     toSend.tokens=this.tokens.length;
     delete toSend.gid;
     delete toSend.isAdmin;
