@@ -213,8 +213,9 @@ app.get("/getPaymentList",loginMiddleware,async (req,res)=>{
     res.send(req.user.payments)
 })
 
-app.get("/me",loginMiddleware,(req,res)=>{
+app.get("/me",loginMiddleware,async (req,res)=>{
     // req.user.getPlan()
+    await req.user.populate("whislist.$*");
     res.send(req.user)
 })
 
