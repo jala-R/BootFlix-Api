@@ -282,7 +282,7 @@ app.get("/movie/:id",async (req,res)=>{
 
 app.get("/addMovieToWhislist/:movieId",loginMiddleware,async (req,res)=>{
     try{
-        let movie=await User.findById(req.params.movieId);
+        let movie=await Movie.findById(req.params.movieId);
         if(!movie)throw new Error("invalid movie id");
         req.user.addMovieToWhislist(req.params.movieId);
         await req.user.save();
@@ -294,7 +294,7 @@ app.get("/addMovieToWhislist/:movieId",loginMiddleware,async (req,res)=>{
 
 app.get("/removeMovieFromWhislist/:movieId",loginMiddleware,async (req,res)=>{
     try{
-        let movie=await User.findById(req.params.movieId);
+        let movie=await Movie.findById(req.params.movieId);
         if(!movie)throw new Error("invalid movie id");
         req.user.removeMovieFromWhislist(req.params.movieId);
         await req.user.save();
