@@ -308,6 +308,7 @@ app.get("/removeMovieFromWhislist/:movieId",loginMiddleware,async (req,res)=>{
 app.get("/getWhishList",loginMiddleware,async (req,res)=>{
     try{
         await req.user.populate("whislist.$*");
+        console.log(req.user)
         res.send(req.user.whislist);
     }catch(err){
         res.status(404).send(err.message);
