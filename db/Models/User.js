@@ -194,11 +194,8 @@ User.prototype.toJSON=function(){
     // console.log(this.whislist)
     let toSend=this.toObject();
     // delete toSend._id;
-    toSend.whislist=[]
-    console.log(Object.keys(this.whislist))
-    Object.keys(this.whislist).forEach(movie=>{
-        toSend.whislist.push(this.whislist[movie]);
-    })
+    toSend.whislist=JSON.stringify(this.whislist)
+    console.log(toSend.whislist)
     toSend.tokens=this.tokens.length;
     delete toSend.gid;
     delete toSend.isAdmin;
