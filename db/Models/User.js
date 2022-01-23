@@ -191,10 +191,10 @@ User.prototype.logout=function(token){
 }
 
 User.prototype.toJSON=function(){
-    console.log(this.whishlist)
+    console.log(this.whislist)
     let toSend=this.toObject();
     // delete toSend._id;
-    console.log(toSend.whishlist)
+    console.log(toSend.whislist)
     toSend.tokens=this.tokens.length;
     delete toSend.gid;
     delete toSend.isAdmin;
