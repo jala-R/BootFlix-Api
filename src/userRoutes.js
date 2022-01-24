@@ -56,6 +56,7 @@ app.get("/oauth-google-callback",async (req,res)=>{
         })
         res.redirect("https://bootflix.herokuapp.com");
     }catch(err){
+        if(err.message==="SLR")return res.redirect("https://bootflix.herokuapp.com/logoutall")
         res.status(400).send(err.message);
     }
 })
@@ -373,8 +374,8 @@ app.get("/twitter-oauth",async (req,res)=>{
         res.redirect("https://bootflix.herokuapp.com");
         
     }catch(err){
-        // console.log(err);
-        res.status(404).send(err.message);
+        if(err.message==="SLR")return res.redirect("https://bootflix.herokuapp.com/logoutall")
+        res.status(400).send(err.message);
     }
 })
 
