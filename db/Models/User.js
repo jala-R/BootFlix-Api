@@ -108,8 +108,29 @@ userSchema.pre("save",async function(next){
 
 const User=mongoose.model("User",userSchema);
 
-User.prototype.addToHistory=function({movieId,totalHour,totalMin,totalSec,curHour,curMin,curSec}){
-    console.log(this.history.id(movieId));
+User.prototype.addToHistory=async function({movieId,totalHour,totalMin,totalSec,curHour,curMin,curSec}){
+    let movie=(this.history.id(movieId))
+    if(movie){
+        movie.prevHour=curHour;
+        movie.prevMin=curMin;
+        movie.prevSec=curSec;
+        movie.totalHour=Math.max(movie.totalHour,totalHour);
+        movie.totalMin=Math.max(movie.totalMin,totalMin);
+        movie.totalSec=Math.max(movie.totalSec,totalSec);
+        await movie.save();
+    }else{
+        this.history.push({
+            _id:movieId,
+            prevHour:curHour,
+            prevMin:curMin,
+            prevSec:curSec,
+            totalHour,
+            totalSec,
+            totalMin
+        })
+        await this.save();
+        
+    }
 }
 
 User.prototype.upgradePlan=function(plan){
