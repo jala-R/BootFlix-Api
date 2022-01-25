@@ -554,8 +554,8 @@ app.get("/getHistory",loginMiddleware,async (req,res)=>{
             path:"history._id",
         })
 
-        req.user.history.sort(function(this,that){
-            if(this.updatedAt>that.updatedAt)return 1;
+        req.user.history.sort(function(movieA,movieB){
+            if(movieA.updatedAt>movieB.updatedAt)return 1;
             else -1
         })
         res.send(req.user.history);
