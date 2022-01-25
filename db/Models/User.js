@@ -51,28 +51,12 @@ const userSchema=new mongoose.Schema({
                 type:mongoose.SchemaTypes.ObjectId,
                 ref:"movie"
             },
-            prevHour:{
-                type:Number,
-                default:0
-            },
-            prevMin:{
-                type:Number,
-                default:0
-            },
-            prevSec:{
-                type:Number,
-                default:0
-            },
-            totalHour:{
-                type:Number,
+            prevTime:{
+                type:String,
                 required:true
             },
-            totalMin:{
-                type:Number,
-                required:true
-            },
-            totalSec:{
-                type:Number,
+            totalTime:{
+                type:String,
                 required:true
             }
         },{
@@ -108,24 +92,16 @@ userSchema.pre("save",async function(next){
 
 const User=mongoose.model("User",userSchema);
 
-User.prototype.addToHistory=async function({movieId,totalHour,totalMin,totalSec,curHour,curMin,curSec}){
+User.prototype.addToHistory=async function({movieId,totalTime,curTime}){
     let movie=(this.history.id(movieId))
     if(movie){
-        movie.prevHour=curHour;
-        movie.prevMin=curMin;
-        movie.prevSec=curSec;
-        movie.totalHour=Math.max(movie.totalHour,totalHour);
-        movie.totalMin=Math.max(movie.totalMin,totalMin);
-        movie.totalSec=Math.max(movie.totalSec,totalSec);
+        movie.prevTime=curTime;
+        movie.totalTime=totalTime
     }else{
         this.history.push({
             _id:movieId,
-            prevHour:curHour,
-            prevMin:curMin,
-            prevSec:curSec,
-            totalHour,
-            totalSec,
-            totalMin
+            prevTime:curTime,
+            totalTime
         })
         
         

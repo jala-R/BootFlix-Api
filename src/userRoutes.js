@@ -564,14 +564,7 @@ app.get("/getHistory",loginMiddleware,async (req,res)=>{
     }
 })
 
-app.get("/getMovieFromHistory",loginMiddleware,async (req,res)=>{
-    try{
-        let movie=await req.user.history.id(req.query.movieId);
-        res.send(movie);
-    }catch(err){
-        res.status(404).send(err.message);
-    }
-})
+
 
 
 
