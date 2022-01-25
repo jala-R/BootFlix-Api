@@ -552,11 +552,11 @@ app.get("/getHistory",loginMiddleware,async (req,res)=>{
     try{
         await req.user.populate({
             path:"history._id",
-            options:{
-                sort:{
-                    updatedAt:-1
-                }
-            }
+        })
+
+        req.user.history.sort(function(this,that){
+            if(this.updatedAt>that.updatedAt)return 1;
+            else -1
         })
         res.send(req.user.history);
     }catch(err){
