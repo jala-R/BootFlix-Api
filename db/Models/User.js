@@ -46,15 +46,38 @@ const userSchema=new mongoose.Schema({
         default:{}
     },
     history:{
-        type:[{
-            movieId:{
+        type:[new mongoose.Schema({
+            _id:{
                 type:mongoose.SchemaTypes.ObjectId,
                 ref:"movie"
             },
-            hour:{type:Number,default:0},
-            min:{type:Number,default:0},
-            sec:{type:Number,default:0}
-        }],
+            prevHour:{
+                type:Number,
+                default:0
+            },
+            prevMin:{
+                type:Number,
+                default:0
+            },
+            prevSec:{
+                type:Number,
+                default:0
+            },
+            totalHour:{
+                type:Number,
+                required:true
+            },
+            totalMin:{
+                type:Number,
+                required:true
+            },
+            totalSec:{
+                type:Number,
+                required:true
+            }
+        },{
+            timestamps:true
+        })],
         default:[]
     },
     password:{
@@ -85,58 +108,9 @@ userSchema.pre("save",async function(next){
 
 const User=mongoose.model("User",userSchema);
 
-
-User.prototype.getMovieFromHistory=(function(movieId){
-    this.history.forEach((movie,i)=>{
-        if(movie.movieId==movieId){
-            this.history.splice(i,1);
-            this.history.unshift(movie);
-            return new Promise((res,rej)=>{
-                this.save()
-                .then(()=>{
-                    res(movie);
-                })
-                .catch((err)=>{
-                    rej(err);
-                })
-            })
-        }
-    })
-    this.history.unshift({
-        movieId
-    })
-    return new Promise((res,rej)=>{
-        this.save()
-        .then(()=>{
-            res(this.history[0]);
-        })
-        .catch((err)=>{
-            rej(err);
-        })
-    })
-    
-})
-
-User.prototype.setMovieContinueTime=(function({movieId,hour,min,sec}){
-    this.history.forEach((movie,i)=>{
-        if(movie.movieId==movieId){
-            this.history.splice(i,1);
-            movie.hour=hour;
-            movie.min=min;
-            movie.sec=sec;
-            this.history.unshift(movie);
-            return new Promise((res,rej)=>{
-                this.save()
-                .then(()=>{
-                    res();
-                })
-                .catch((err)=>{
-                    rej(err);
-                })
-            })
-        }
-    })
-})
+User.prototype.addToHistory=function({movieId,totalHour,totalMin,totalSec,curHour,curMin,curSec}){
+    console.log(this.history.id(movieId));
+}
 
 User.prototype.upgradePlan=function(plan){
     this.timer=jwt.sign({plan},process.env.JWTSECRET,{
