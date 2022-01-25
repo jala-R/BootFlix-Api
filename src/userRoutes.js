@@ -542,6 +542,7 @@ app.get("/movie-genrewise",async (req,res)=>{
 app.get("/addToHistory",loginMiddleware,async (req,res)=>{
     try{
         req.user.addToHistory(req.query);
+        res.send();
     }catch(err){
         res.status(404).send(err.message);
     }
