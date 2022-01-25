@@ -89,11 +89,11 @@ class TrailerCustomStorage {
 const movieParse = multer({storage:new MovieCustomStorage()});
 const trailerParse=multer({storage:new TrailerCustomStorage()});
 
-app.get("/isAdmin",(req,res)=>{
-    res.send();
-})
+// app.get("/isAdmin",logadminMiddleware,adminMiddleware,(req,res)=>{
+//     res.send();
+// })
 
-app.post("/movie",async (req,res)=>{
+app.post("/movie",loginMiddleware,adminMiddleware,async (req,res)=>{
     try{
         let movie=new Movie(req.body);
         movie=await movie.save();
@@ -104,7 +104,7 @@ app.post("/movie",async (req,res)=>{
 })
 
 
-app.post("/upload/movie/:movieId",movieParse.single("movie"),async (req,res)=>{
+app.post("/upload/movie/:movieId",loginMiddleware,adminMiddleware,movieParse.single("movie"),async (req,res)=>{
 
     try{
         let movie=await Movie.findById(req.params.movieId);
@@ -118,7 +118,7 @@ app.post("/upload/movie/:movieId",movieParse.single("movie"),async (req,res)=>{
 })
 
 
-app.post("/upload/trailer/:movieId",trailerParse.single("trailer"),async (req,res)=>{
+app.post("/upload/trailer/:movieId",loginMiddleware,adminMiddleware,trailerParse.single("trailer"),async (req,res)=>{
     try{
         let movie=await Movie.findById(req.params.movieId);
         movie.trailerUploded=true;
@@ -130,7 +130,7 @@ app.post("/upload/trailer/:movieId",trailerParse.single("trailer"),async (req,re
     }
 })
 
-app.put("/movie/:movieId",async (req,res)=>{
+app.put("/movie/:movieId",loginMiddleware,adminMiddleware,async (req,res)=>{
     try{
         // console.log("lollll")
         let movie=await Movie.findById(req.params.movieId);
@@ -146,7 +146,7 @@ app.put("/movie/:movieId",async (req,res)=>{
     }
 })
 
-app.get("/users",async (req,res)=>{
+app.get("/users",loginMiddleware,adminMiddleware,async (req,res)=>{
     try{
         let users=await User.find({},null,{
             sort:{
@@ -159,7 +159,7 @@ app.get("/users",async (req,res)=>{
     }
 })
 
-app.get("/usersTop5",async (req,res)=>{
+app.get("/usersTop5",loginMiddleware,adminMiddleware,async (req,res)=>{
     try{
         let users=await User.find({},null,{
             sort:{
@@ -173,7 +173,7 @@ app.get("/usersTop5",async (req,res)=>{
     }
 })
 
-app.get("/paymentssTop5",async (req,res)=>{
+app.get("/paymentssTop5",loginMiddleware,adminMiddleware,async (req,res)=>{
     try{
         let payments=await Payment.find({},null,{
             sort:{
@@ -194,7 +194,7 @@ app.get("/paymentssTop5",async (req,res)=>{
     }
 })
 
-app.get("/getMonthlyUsers",async (req,res)=>{
+app.get("/getMonthlyUsers",loginMiddleware,adminMiddleware,async (req,res)=>{
     try{
         let today=new Date();
         let curMonth=today.getMonth();
@@ -218,7 +218,7 @@ app.get("/getMonthlyUsers",async (req,res)=>{
     }
 })
 
-app.get("/users/:id",async (req,res)=>{
+app.get("/users/:id",loginMiddleware,adminMiddleware,async (req,res)=>{
     try{
         let user=await User.findById(req.params.id);
         if(!user)throw new Error("invalid user id");
@@ -237,7 +237,7 @@ app.get("/users/:id",async (req,res)=>{
     }
 })
 
-app.get("/userDivisons",async (req,res)=>{
+app.get("/userDivisons",loginMiddleware,adminMiddleware,async (req,res)=>{
     try{
         let users=await User.find({});
         let preminum=0,standard=0,free=0;
@@ -298,7 +298,7 @@ app.get("/userDivisons",async (req,res)=>{
 
 
 
-app.delete("/movie/:movieId",async (req,res)=>{
+app.delete("/movie/:movieId",loginMiddleware,adminMiddleware,async (req,res)=>{
     try{
         let movie=await Movie.findById(req.params.movieId);
         if(!movie)throw new Error("invalid movieid");
@@ -311,19 +311,19 @@ app.delete("/movie/:movieId",async (req,res)=>{
     }
 })
 
-app.delete("/movieVideo/:movieId",async (req,res)=>{
+app.delete("/movieVideo/:movieId",loginMiddleware,adminMiddleware,async (req,res)=>{
     try{
         let movie=await Movie.findById(req.params.movieId);
         if(!movie)throw new Error("invalid movieid");
         await movie.removeMovie(req.googleClient);
-        console.log("lolllll")
+        // console.log("lolllll")
         res.send();
     }catch(err){
         res.status(400).send(err.message)
     }
 })
 
-app.delete("/movieTrailer/:movieId",async (req,res)=>{
+app.delete("/movieTrailer/:movieId",loginMiddleware,adminMiddleware,async (req,res)=>{
     try{
         let movie=await Movie.findById(req.params.movieId);
         if(!movie)throw new Error("invalid movieid");
@@ -334,7 +334,7 @@ app.delete("/movieTrailer/:movieId",async (req,res)=>{
     }
 })
 
-app.delete("/user/:id",async (req,res)=>{
+app.delete("/user/:id",loginMiddleware,adminMiddleware,async (req,res)=>{
     try{
         let user=await User.findById(req.params.id);
         if(!user)throw new Error("invalid id");
@@ -345,7 +345,7 @@ app.delete("/user/:id",async (req,res)=>{
     }
 })
 
-app.get("/getAllPayments",async (req,res)=>{
+app.get("/getAllPayments",loginMiddleware,adminMiddleware,async (req,res)=>{
     try{
         let payments=await Payment.find({},null,{
             sort:{
@@ -365,7 +365,7 @@ app.get("/getAllPayments",async (req,res)=>{
 
 
 
-app.post("/adminLogoutAll",async (req,res)=>{
+app.post("/adminLogoutAll",loginMiddleware,adminMiddleware,async (req,res)=>{
     try{
         let admin=await User.findOne({handle:req.body.email});
         if(!admin||!admin.isAdmin)throw new Error("forbidden actions");
@@ -419,7 +419,7 @@ class ImageCustomStorage {
     }
 }
 
-app.post("/upload-movie-images/:movieId",multer({storage:new ImageCustomStorage()}).fields([
+app.post("/upload-movie-images/:movieId",loginMiddleware,adminMiddleware,multer({storage:new ImageCustomStorage()}).fields([
     {
         name:"image",
         maxCount:1

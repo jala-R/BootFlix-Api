@@ -89,7 +89,7 @@ app.get("/logout",loginMiddleware,async (req,res)=>{
 //   </video>`)
 // })
 
-app.get("/movie/:movieId/watch",async (req,res)=>{
+app.get("/movie/:movieId/watch",loginMiddleware,isEligible,async (req,res)=>{
     let start=Number(req.headers.range.slice(6,req.headers.range.length-1));
     let oneMB=10**6;
     
@@ -140,7 +140,7 @@ app.get("/trailer/:movieId/watch",loginMiddleware,isEligible,async (req,res)=>{
     
 })
 
-app.get("/upgradePlan/:toPlan",async (req,res)=>{
+app.get("/upgradePlan/:toPlan",loginMiddleware,async (req,res)=>{
     try{
         let price;
         if(req.params.toPlan==="Preminum")price=200;
