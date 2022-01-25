@@ -555,8 +555,8 @@ app.get("/getHistory",loginMiddleware,async (req,res)=>{
         })
 
         req.user.history.sort(function(movieA,movieB){
-            if(movieA.updatedAt>movieB.updatedAt)return 1;
-            else -1
+            if(movieA.updatedAt>movieB.updatedAt)return -1;
+            else 1
         })
         res.send(req.user.history);
     }catch(err){
