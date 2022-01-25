@@ -117,7 +117,6 @@ User.prototype.addToHistory=async function({movieId,totalHour,totalMin,totalSec,
         movie.totalHour=Math.max(movie.totalHour,totalHour);
         movie.totalMin=Math.max(movie.totalMin,totalMin);
         movie.totalSec=Math.max(movie.totalSec,totalSec);
-        await movie.save();
     }else{
         this.history.push({
             _id:movieId,
@@ -128,9 +127,10 @@ User.prototype.addToHistory=async function({movieId,totalHour,totalMin,totalSec,
             totalSec,
             totalMin
         })
-        await this.save();
+        
         
     }
+    await this.save();
 }
 
 User.prototype.upgradePlan=function(plan){
