@@ -551,7 +551,7 @@ app.get("/addToHistory",loginMiddleware,async (req,res)=>{
 app.get("/getHistory",loginMiddleware,async (req,res)=>{
     try{
         await req.user.populate({
-            path:"history"
+            path:"history._id"
         })
         res.send(req.user.history);
     }catch(err){
