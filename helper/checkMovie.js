@@ -6,11 +6,13 @@ function checkMovie(req,res,next){
     // console.log(payload);
     let movieLvl=payload.movie.plan;
     let {plan:userLvl}=req.user.getPlan();
+    console.log(userLvl);
     if(userLvl==="Preminum")return next();
     else if(userLvl==="Standard"){
         if(movieLvl==="Preminum")return res.status(404).send("movie not eligible");
         return next();
     }else{
+        console.log(movieLvl);
         if(movieLvl!="Free")return res.status(404).send("movie not eligible");
         return next();
     }
