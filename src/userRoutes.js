@@ -101,7 +101,7 @@ app.get("/isEligiblieForMovie/:movieId",loginMiddleware,isEligible,(req,res)=>{
     })
     res.send();
 })
-app.get("/movie/:movieId/watch",loginMiddleware,checkMovie,async (req,res)=>{
+app.get("/movie/:movieId/watch",async (req,res)=>{
     let start=Number(req.headers.range.slice(6,req.headers.range.length-1));
     let oneMB=10**6;
     
