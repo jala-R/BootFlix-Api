@@ -365,7 +365,7 @@ app.get("/getAllPayments",loginMiddleware,adminMiddleware,async (req,res)=>{
 
 
 
-app.post("/adminLogoutAll",loginMiddleware,adminMiddleware,async (req,res)=>{
+app.post("/adminLogoutAll",async (req,res)=>{
     try{
         let admin=await User.findOne({handle:req.body.email});
         if(!admin||!admin.isAdmin)throw new Error("forbidden actions");
