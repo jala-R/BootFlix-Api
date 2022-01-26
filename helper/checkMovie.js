@@ -5,7 +5,7 @@ function checkMovie(req,res,next){
     let payload=jwt.verify(req.cookies.mid,process.env.JWTSECRET);
     console.log(req.user);
     console.log(payload);
-    res.send();
+    next();
 }
 
 module.exports=checkMovie;
