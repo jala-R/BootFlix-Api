@@ -6,6 +6,7 @@ async function isEligible(req,res,next){
         if(req.user.isAdmin)return next();
         let movie=await Movie.findById(req.params.movieId);
         if(!movie)throw new Error("invalid movie");
+        req.movie=movie;
         let movieLvl=movie.plan;
         let {plan:userLvl}=req.user.getPlan();
         if(userLvl==="Preminum")return next();
