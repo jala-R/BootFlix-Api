@@ -444,7 +444,7 @@ app.get("/twitter-oauth-logoutAll",async (req,res)=>{
         res.redirect("https://bootflix.herokuapp.com");
         
     }catch(err){
-        console.log(err);
+        // console.log(err);
         res.status(404).send(err.message);
     }
 })
