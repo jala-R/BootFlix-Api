@@ -3,7 +3,7 @@ const jwt=require("jsonwebtoken"),
 
 async function loginMiddleware(req,res,next){
     try{
-        console.log(req.cookies);
+        // console.log(req.cookies);
         if(!req.cookies||!req.cookies.sid)throw new Error("not authenticated");
         let token=req.cookies.sid;
         let {id}=(jwt.verify(token,process.env.JWTSECRET));
