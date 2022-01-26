@@ -6,7 +6,8 @@ const express=require("express"),
     isEligible=require("../helper/isEligible"),
     crypto=require("crypto"),
     Movie=require("../db/Models/Movies"),
-    jwt=require("jsonwebtoken");
+    jwt=require("jsonwebtoken"),
+    checkMovie=require("../helper/checkMovie");
 
 
 app.get("/google-auth",(req,res)=>{
@@ -89,7 +90,7 @@ app.get("/logout",loginMiddleware,async (req,res)=>{
 //     Your browser does not support the video tag.
 //   </video>`)
 // })
-app.get("/isEligiblieForMove/:movieId",loginMiddleware,isEligible,(req,res)=>{
+app.get("/isEligiblieForMovie/:movieId",loginMiddleware,isEligible,(req,res)=>{
     let token=jwt.sign({movie:req.movie},process.env.JWTSECRET);
     res.cookie("mid",token,{
         httpOnly:true,
@@ -100,7 +101,7 @@ app.get("/isEligiblieForMove/:movieId",loginMiddleware,isEligible,(req,res)=>{
     })
     res.send();
 })
-app.get("/movie/:movieId/watch",loginMiddleware,async (req,res)=>{
+app.get("/movie/:movieId/watch",loginMiddleware,checkMovie,async (req,res)=>{
     let start=Number(req.headers.range.slice(6,req.headers.range.length-1));
     let oneMB=10**6;
     
