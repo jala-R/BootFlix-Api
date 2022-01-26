@@ -91,7 +91,7 @@ app.get("/logout",loginMiddleware,async (req,res)=>{
 // })
 app.get("/isEligiblieForMove/:movieId",loginMiddleware,isEligible,(req,res)=>{
     let token=jwt.sign({movie:req.movie},process.env.JWTSECRET);
-    res.cookie("sid",token,{
+    res.cookie("mid",token,{
         httpOnly:true,
         maxAge:1000*60*60*24*365*2,
         sameSite:"none",
